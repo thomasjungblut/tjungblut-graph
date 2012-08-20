@@ -4,3 +4,15 @@
 *.jar
 *.war
 *.ear
+
+# DIRs #
+
+/bin
+/target
+/.settings
+/lib
+/.project
+/.classpath
+
+
+
