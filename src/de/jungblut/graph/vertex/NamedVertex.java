@@ -1,5 +1,11 @@
 package de.jungblut.graph.vertex;
 
+/**
+ * Named vertex. This is a wrapper to a vertex and adds a name.
+ * 
+ * @author thomas.jungblut
+ * 
+ */
 public final class NamedVertex implements Vertex {
 
   private final Vertex vertex;
@@ -20,38 +26,28 @@ public final class NamedVertex implements Vertex {
     return vertex.getVertexId();
   }
 
+  @Override
+  public Vertex getVertex() {
+    return vertex;
+  }
+
   public String getName() {
     return name;
   }
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((vertex == null) ? 0 : vertex.hashCode());
-    return result;
+    return BasicVertex.hashCode(this);
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    NamedVertex other = (NamedVertex) obj;
-    if (vertex == null) {
-      if (other.vertex != null)
-        return false;
-    } else if (!vertex.equals(other.vertex))
-      return false;
-    return true;
+    return BasicVertex.equals(this, (Vertex) obj);
   }
 
   @Override
   public String toString() {
-    return "Vertex [name=" + getName() + "]";
+    return "NamedVertex [vertex=" + vertex + ", name=" + name + "]";
   }
 
 }
