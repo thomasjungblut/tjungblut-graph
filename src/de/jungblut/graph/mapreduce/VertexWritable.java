@@ -8,11 +8,11 @@ import java.util.TreeSet;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Writable;
 
-public class VertexWritable implements Writable, Cloneable {
+public final class VertexWritable implements Writable, Cloneable {
 
-  LongWritable minimalVertexId;
-  TreeSet<LongWritable> pointsTo;
-  boolean activated;
+  private LongWritable vertexId;
+  private TreeSet<LongWritable> edges;
+  private boolean activated;
 
   public VertexWritable() {
     super();
@@ -20,17 +20,17 @@ public class VertexWritable implements Writable, Cloneable {
 
   public VertexWritable(LongWritable minimalVertexId) {
     super();
-    this.minimalVertexId = minimalVertexId;
+    this.vertexId = minimalVertexId;
   }
 
   // true if updated
   public boolean checkAndSetMinimalVertex(LongWritable id) {
-    if (minimalVertexId == null) {
-      minimalVertexId = id;
+    if (vertexId == null) {
+      vertexId = id;
       return true;
     } else {
-      if (id.get() < minimalVertexId.get()) {
-        minimalVertexId = id;
+      if (id.get() < vertexId.get()) {
+        vertexId = id;
         return true;
       }
     }
@@ -38,30 +38,30 @@ public class VertexWritable implements Writable, Cloneable {
   }
 
   public boolean isMessage() {
-    if (pointsTo == null)
+    if (edges == null)
       return true;
     else
       return false;
   }
 
   public VertexWritable makeMessage() {
-    return new VertexWritable(minimalVertexId);
+    return new VertexWritable(vertexId);
   }
 
   public void addVertex(LongWritable id) {
-    if (pointsTo == null)
-      pointsTo = new TreeSet<LongWritable>();
-    pointsTo.add(id);
+    if (edges == null)
+      edges = new TreeSet<LongWritable>();
+    edges.add(id);
   }
 
   @Override
   public void write(DataOutput out) throws IOException {
-    minimalVertexId.write(out);
-    if (pointsTo == null) {
+    vertexId.write(out);
+    if (edges == null) {
       out.writeInt(-1);
     } else {
-      out.writeInt(pointsTo.size());
-      for (LongWritable l : pointsTo) {
+      out.writeInt(edges.size());
+      for (LongWritable l : edges) {
         l.write(out);
       }
     }
@@ -70,36 +70,36 @@ public class VertexWritable implements Writable, Cloneable {
 
   @Override
   public void readFields(DataInput in) throws IOException {
-    minimalVertexId = new LongWritable();
-    minimalVertexId.readFields(in);
+    vertexId = new LongWritable();
+    vertexId.readFields(in);
     int length = in.readInt();
     if (length > -1) {
-      pointsTo = new TreeSet<LongWritable>();
+      edges = new TreeSet<LongWritable>();
       for (int i = 0; i < length; i++) {
         LongWritable temp = new LongWritable();
         temp.readFields(in);
-        pointsTo.add(temp);
+        edges.add(temp);
       }
     } else {
-      pointsTo = null;
+      edges = null;
     }
     activated = in.readBoolean();
   }
 
   @Override
   public String toString() {
-    return "VertexWritable [minimalVertexId=" + minimalVertexId + ", pointsTo="
-        + pointsTo + "]";
+    return "VertexWritable [minimalVertexId=" + vertexId + ", pointsTo="
+        + edges + "]";
   }
 
   @Override
   protected VertexWritable clone() {
     VertexWritable toReturn = new VertexWritable(new LongWritable(
-        minimalVertexId.get()));
-    if (pointsTo != null) {
-      toReturn.pointsTo = new TreeSet<LongWritable>();
-      for (LongWritable l : pointsTo) {
-        toReturn.pointsTo.add(new LongWritable(l.get()));
+        vertexId.get()));
+    if (edges != null) {
+      toReturn.edges = new TreeSet<LongWritable>();
+      for (LongWritable l : edges) {
+        toReturn.edges.add(new LongWritable(l.get()));
       }
     }
     return toReturn;
@@ -108,4 +108,25 @@ public class VertexWritable implements Writable, Cloneable {
   public boolean isActivated() {
     return activated;
   }
+
+  public void setVertexId(LongWritable vertexId) {
+    this.vertexId = vertexId;
+  }
+
+  public void setEdges(TreeSet<LongWritable> edges) {
+    this.edges = edges;
+  }
+
+  public void setActivated(boolean activated) {
+    this.activated = activated;
+  }
+
+  public LongWritable getVertexId() {
+    return vertexId;
+  }
+
+  public TreeSet<LongWritable> getEdges() {
+    return edges;
+  }
+
 }

@@ -21,14 +21,14 @@ public class MindistSearchJob {
     Configuration conf = new Configuration();
     conf.set("recursion.depth", depth + "");
     Job job = new Job(conf);
-    job.setJobName("Graph explorer");
+    job.setJobName("Mindist Search");
 
     job.setMapperClass(TextGraphMapper.class);
     job.setReducerClass(MindistSearchReducer.class);
     job.setJarByClass(TextGraphMapper.class);
 
-    Path in = new Path("files/graph-exploration/import/");
-    Path out = new Path("files/graph-exploration/depth_1");
+    Path in = new Path("files/min-search/import/");
+    Path out = new Path("files/min-search/depth_1");
 
     FileInputFormat.addInputPath(job, in);
     FileSystem fs = FileSystem.get(conf);
@@ -50,14 +50,14 @@ public class MindistSearchJob {
       conf = new Configuration();
       conf.set("recursion.depth", depth + "");
       job = new Job(conf);
-      job.setJobName("Graph explorer " + depth);
+      job.setJobName("Mindist Search " + depth);
 
       job.setMapperClass(MindistSearchMapper.class);
       job.setReducerClass(MindistSearchReducer.class);
       job.setJarByClass(MindistSearchMapper.class);
 
-      in = new Path("files/graph-exploration/depth_" + (depth - 1) + "/");
-      out = new Path("files/graph-exploration/depth_" + depth);
+      in = new Path("files/min-search/depth_" + (depth - 1) + "/");
+      out = new Path("files/min-search/depth_" + depth);
 
       FileInputFormat.addInputPath(job, in);
       if (fs.exists(out))

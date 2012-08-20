@@ -32,8 +32,8 @@ public class TextGraphMapper extends
 
     context.write(realKey, vertex);
 
-    for (LongWritable l : vertex.pointsTo) {
-      context.write(l, vertex.makeMessage());
+    for (LongWritable edge : vertex.getEdges()) {
+      context.write(edge, vertex.makeMessage());
     }
   }
 

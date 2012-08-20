@@ -15,11 +15,11 @@ public class MindistSearchMapper extends
     context.write(key, value);
     if (value.isActivated()) {
       VertexWritable writable = new VertexWritable();
-      for (LongWritable l : value.pointsTo) {
-        if (l.get() != value.minimalVertexId.get()) {
-          writable.minimalVertexId = value.minimalVertexId;
-          writable.pointsTo = null;
-          context.write(l, writable);
+      for (LongWritable neighborVertex : value.getEdges()) {
+        if (neighborVertex.get() != value.getVertexId().get()) {
+          writable.setVertexId(value.getVertexId());
+          writable.setEdges(null);
+          context.write(neighborVertex, writable);
         }
       }
     }

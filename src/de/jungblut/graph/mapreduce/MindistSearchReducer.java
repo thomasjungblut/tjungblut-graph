@@ -39,10 +39,10 @@ public class MindistSearchReducer extends
           realVertex = vertex.clone();
         }
       }
-      realVertex.activated = true;
-      realVertex.minimalVertexId = realVertex.pointsTo.first();
-      if (key.get() < realVertex.minimalVertexId.get())
-        realVertex.minimalVertexId = key;
+      realVertex.setActivated(true);
+      realVertex.setVertexId(realVertex.getEdges().first());
+      if (key.get() < realVertex.getVertexId().get())
+        realVertex.setVertexId(key);
       context.getCounter(UpdateCounter.UPDATED).increment(1);
     } else {
       for (VertexWritable vertex : values) {
@@ -52,22 +52,22 @@ public class MindistSearchReducer extends
           }
         } else {
           if (currentMinimalKey == null) {
-            currentMinimalKey = new LongWritable(vertex.minimalVertexId.get());
+            currentMinimalKey = new LongWritable(vertex.getVertexId().get());
           } else {
-            if (currentMinimalKey.get() > vertex.minimalVertexId.get()) {
-              currentMinimalKey = new LongWritable(vertex.minimalVertexId.get());
+            if (currentMinimalKey.get() > vertex.getVertexId().get()) {
+              currentMinimalKey = new LongWritable(vertex.getVertexId().get());
             }
           }
         }
       }
 
       if (currentMinimalKey != null
-          && currentMinimalKey.get() < realVertex.minimalVertexId.get()) {
-        realVertex.minimalVertexId = currentMinimalKey;
-        realVertex.activated = true;
+          && currentMinimalKey.get() < realVertex.getVertexId().get()) {
+        realVertex.setVertexId(currentMinimalKey);
+        realVertex.setActivated(true);
         context.getCounter(UpdateCounter.UPDATED).increment(1);
       } else {
-        realVertex.activated = false;
+        realVertex.setActivated(false);
       }
     }
 
