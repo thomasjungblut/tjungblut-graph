@@ -32,7 +32,7 @@ public final class SSSP {
 
   // a vertex ID is text and we are using a id/distance tuple for shortest paths
   public static class ShortestPathVertex extends
-      Vertex<Text, TextIntPairWritable, TextIntPairWritable> {
+      Vertex<Text, IntWritable, TextIntPairWritable> {
 
     public ShortestPathVertex() {
       this.setValue(new TextIntPairWritable(this.getVertexID(),
@@ -60,9 +60,9 @@ public final class SSSP {
       if (minDist < this.getValue().getDistance().get()) {
         this.setValue(new TextIntPairWritable(minPredecessor, new IntWritable(
             minDist)));
-        for (Edge<Text, TextIntPairWritable> e : this.getEdges()) {
+        for (Edge<Text, IntWritable> e : this.getEdges()) {
           sendMessage(e, new TextIntPairWritable(this.getVertexID(),
-              new IntWritable(minDist + e.getValue().getDistance().get())));
+              new IntWritable(minDist + e.getValue().get())));
         }
       } else {
         voteToHalt();
@@ -70,8 +70,9 @@ public final class SSSP {
     }
   }
 
-  public static class SSSPTextReader extends
-      VertexInputReader<LongWritable, Text, Text, IntWritable, IntWritable> {
+  public static class SSSPTextReader
+      extends
+      VertexInputReader<LongWritable, Text, Text, IntWritable, TextIntPairWritable> {
 
     /**
      * The text file essentially should look like: <br/>
@@ -83,7 +84,7 @@ public final class SSSP {
      */
     @Override
     public boolean parseVertex(LongWritable key, Text value,
-        Vertex<Text, IntWritable, IntWritable> vertex) {
+        Vertex<Text, IntWritable, TextIntPairWritable> vertex) {
       String[] split = value.toString().split("\t");
       for (int i = 0; i < split.length; i++) {
         if (i == 0) {
@@ -135,6 +136,11 @@ public final class SSSP {
       distance.write(out);
     }
 
+    @Override
+    public String toString() {
+      return id + "\t" + distance;
+    }
+
   }
 
   private static void printUsage() {
@@ -170,12 +176,12 @@ public final class SSSP {
     ssspJob.setOutputFormat(TextOutputFormat.class);
     ssspJob.setVertexInputReaderClass(SSSPTextReader.class);
     ssspJob.setOutputKeyClass(Text.class);
-    ssspJob.setOutputValueClass(IntWritable.class);
+    ssspJob.setOutputValueClass(TextIntPairWritable.class);
     // Iterate until all the nodes have been reached.
     ssspJob.setMaxIteration(Integer.MAX_VALUE);
 
     ssspJob.setVertexIDClass(Text.class);
-    ssspJob.setVertexValueClass(IntWritable.class);
+    ssspJob.setVertexValueClass(TextIntPairWritable.class);
     ssspJob.setEdgeValueClass(IntWritable.class);
 
     long startTime = System.currentTimeMillis();
