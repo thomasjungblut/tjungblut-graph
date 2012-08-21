@@ -91,7 +91,6 @@ public final class AStar {
     return new WeightedEdgeContainer<>(g_score, cameFrom);
   }
 
-  // TODO can be replaced by a priority queue to speed up
   private static CostVertex findLowest(HashSet<CostVertex> openSet,
       HashMap<CostVertex, Double> scoredMap) {
     CostVertex low = null;
