@@ -106,9 +106,10 @@ public final class SSSPTest extends TestCase {
   }
 
   private void verifyOutput(FileSystem fs, Path out) throws IOException {
-    // TODO check the predecessors!
-    int[] result = new int[10];
+    int[] costResult = new int[10];
+    int[] ancestorResult = new int[10];
     int[] costs = new int[] { 0, 85, 217, 503, 173, 165, 403, 320, 415, 487 };
+    int[] ancestors = new int[] { 0, 0, 0, 7, 0, 1, 2, 2, 5, 7 };
     FileStatus[] status = fs.listStatus(out);
     for (FileStatus fss : status) {
       BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -118,13 +119,15 @@ public final class SSSPTest extends TestCase {
       while ((line = reader.readLine()) != null) {
         System.out.println(line);
         String[] split = line.split("\t");
-        result[Integer.parseInt(split[0])] = Integer.parseInt(split[2]);
+        costResult[Integer.parseInt(split[0])] = Integer.parseInt(split[2]);
+        ancestorResult[Integer.parseInt(split[0])] = Integer.parseInt(split[1]);
       }
       reader.close();
     }
 
-    for (int i = 0; i < result.length; i++) {
-      assertEquals(costs[i], result[i]);
+    for (int i = 0; i < ancestorResult.length; i++) {
+      assertEquals(costs[i], costResult[i]);
+      assertEquals(ancestors[i], ancestorResult[i]);
     }
 
   }
