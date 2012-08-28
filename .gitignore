@@ -13,7 +13,9 @@
 /lib
 /.project
 /.classpath
-
+/.idea
+/tjungblut-graph.eml
+/tjungblut-graph.iml
 
 
 /files
