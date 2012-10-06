@@ -24,14 +24,14 @@ public final class AStar {
    */
   public static WeightedEdgeContainer<CostVertex> startAStarSearch(
       Graph<CostVertex> g, CostVertex start, CostVertex goal) {
-    return startAStarSearchInternal(g, start, goal, DEFAULT_MEASURER);
+    return startAStarSearch(g, start, goal, DEFAULT_MEASURER);
   }
 
   /**
    * Executes an A* search in a graph. It needs a graph, the start and end
    * vertex as well as a heuristic distance measurer.
    */
-  private static WeightedEdgeContainer<CostVertex> startAStarSearchInternal(
+  public static WeightedEdgeContainer<CostVertex> startAStarSearch(
       Graph<CostVertex> g, CostVertex start, CostVertex goal,
       DistanceMeasurer<CostVertex> measurer) {
 
