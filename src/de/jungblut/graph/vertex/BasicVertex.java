@@ -9,7 +9,7 @@ package de.jungblut.graph.vertex;
  * @author thomas.jungblut
  * 
  */
-public final class BasicVertex implements Vertex {
+public class BasicVertex implements Vertex {
 
   private final int vertexId;
 
@@ -20,11 +20,6 @@ public final class BasicVertex implements Vertex {
   @Override
   public int getVertexId() {
     return vertexId;
-  }
-
-  @Override
-  public Vertex getVertex() {
-    return this;
   }
 
   @Override

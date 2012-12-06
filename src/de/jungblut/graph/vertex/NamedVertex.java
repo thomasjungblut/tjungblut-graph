@@ -26,11 +26,6 @@ public final class NamedVertex implements Vertex {
     return vertex.getVertexId();
   }
 
-  @Override
-  public Vertex getVertex() {
-    return vertex;
-  }
-
   public String getName() {
     return name;
   }

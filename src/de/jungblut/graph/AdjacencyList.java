@@ -16,43 +16,43 @@ import de.jungblut.graph.vertex.Vertex;
  * 
  * @author thomas.jungblut
  * 
- * @param <K> the type of {@link Vertex} to use.
+ * @param <V> the type of {@link Vertex} to use.
  */
-public final class AdjacencyList<K extends Vertex> implements Graph<K> {
+public final class AdjacencyList<V extends Vertex> implements Graph<V> {
 
-  private final HashSet<K> vertexSet = new HashSet<>();
-  private final HashMap<Integer, K> vertexMap = new HashMap<>();
-  private final HashMultimap<Integer, K> adjacencyList = HashMultimap.create();
+  private final HashSet<V> vertexSet = new HashSet<>();
+  private final HashMap<Integer, V> vertexMap = new HashMap<>();
+  private final HashMultimap<Integer, V> adjacencyList = HashMultimap.create();
 
   @Override
-  public Set<K> getAdjacentVertices(int vertexId) {
+  public Set<V> getAdjacentVertices(int vertexId) {
     return adjacencyList.get(vertexId);
   }
 
   @Override
-  public Set<K> getAdjacentVertices(K vertex) {
+  public Set<V> getAdjacentVertices(V vertex) {
     return adjacencyList.get(vertex.getVertexId());
   }
 
   @Override
-  public Set<K> getVertexSet() {
+  public Set<V> getVertexSet() {
     return vertexSet;
   }
 
   @Override
-  public void addVertex(K vertex, @SuppressWarnings("unchecked") K... adjacents) {
+  public void addVertex(V vertex, @SuppressWarnings("unchecked") V... adjacents) {
     addVertex(vertex, Arrays.asList(adjacents));
   }
 
   @Override
-  public void addVertex(K vertex, List<K> adjacents) {
+  public void addVertex(V vertex, List<V> adjacents) {
     vertexMap.put(vertex.getVertexId(), vertex);
     vertexSet.addAll(adjacents);
     adjacencyList.putAll(vertex.getVertexId(), adjacents);
   }
 
   @Override
-  public K getVertex(int vertexId) {
+  public V getVertex(int vertexId) {
     return vertexMap.get(vertexId);
   }
 
