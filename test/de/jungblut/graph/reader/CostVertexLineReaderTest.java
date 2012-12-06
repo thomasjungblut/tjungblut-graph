@@ -1,7 +1,6 @@
 package de.jungblut.graph.reader;
 
 import java.io.IOException;
-import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -24,15 +23,9 @@ public class CostVertexLineReaderTest extends TestCase {
     CostVertex vertex = graph.getVertex(1);
     assertNotNull(vertex);
 
-    Set<CostVertex> vertexSet = graph.getVertexSet();
-    assertEquals(499, vertexSet.size());
+    assertEquals(499, graph.getNumVertices());
 
-    int edgeSum = 0;
-    for (CostVertex v : vertexSet) {
-      edgeSum += graph.getAdjacentVertices(v).size();
-    }
-
-    assertEquals(2175, edgeSum);
+    assertEquals(2184, graph.getNumEdges());
 
   }
 }

@@ -56,4 +56,20 @@ public final class AdjacencyList<V extends Vertex> implements Graph<V> {
     return vertexMap.get(vertexId);
   }
 
+  @Override
+  public int getNumVertices() {
+    return vertexSet.size();
+  }
+
+  @Override
+  public int getNumEdges() {
+    return adjacencyList.size();
+  }
+
+  @Override
+  public String toString() {
+    return "AdjacencyList [getNumVertices()=" + this.getNumVertices()
+        + ", getNumEdges()=" + this.getNumEdges() + "]";
+  }
+
 }

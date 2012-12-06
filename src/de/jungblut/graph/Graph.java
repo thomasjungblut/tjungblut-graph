@@ -45,4 +45,14 @@ public interface Graph<V extends Vertex> {
    */
   public Set<V> getVertexSet();
 
+  /**
+   * @return how many vertices are present in this graph.
+   */
+  public int getNumVertices();
+
+  /**
+   * @return how many edges are present in this graph.
+   */
+  public int getNumEdges();
+
 }
