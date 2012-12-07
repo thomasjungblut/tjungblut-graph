@@ -12,7 +12,6 @@ import de.jungblut.graph.model.Vertex;
  * A* algorithm for fast and heuristic search of the shortest paths in a graph.
  * 
  * @author thomas.jungblut
- * 
  */
 public final class AStar<VERTEX_ID, VERTEX_VALUE> {
 
