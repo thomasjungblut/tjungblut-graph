@@ -24,6 +24,8 @@ public final class CostVertexLineReader implements
     VertexReader<Integer, Integer, Integer> {
 
   private final Pattern splitPattern;
+  private final boolean undirected;
+
   private String path;
   private int skipLines;
 
@@ -31,9 +33,10 @@ public final class CostVertexLineReader implements
    * Constructs a new reader for tab delimited files that need no skip lines.
    * 
    * @param path the path of the text file.
+   * @param undirected true if graph should be undirected.
    */
-  public CostVertexLineReader(String path) {
-    this(path, '\t', 0);
+  public CostVertexLineReader(String path, boolean undirected) {
+    this(path, '\t', 0, undirected);
   }
 
   /**
@@ -42,10 +45,13 @@ public final class CostVertexLineReader implements
    * @param path the path where the text file is stored.
    * @param delimiter the delimiter for the vertices and costs.
    * @param skipLines how many lines to skip
+   * @param undirected true if graph should be undirected.
    */
-  public CostVertexLineReader(String path, char delimiter, int skipLines) {
+  public CostVertexLineReader(String path, char delimiter, int skipLines,
+      boolean undirected) {
     this.path = path;
     this.skipLines = skipLines;
+    this.undirected = undirected;
     this.splitPattern = Pattern.compile("" + delimiter);
   }
 
@@ -91,5 +97,9 @@ public final class CostVertexLineReader implements
     graph.addVertex(vertex, new Edge<Integer, Integer>(dest, cost));
     // take care that the destination is there
     graph.addVertex(new VertexImpl<Integer, Integer>(dest, null));
+    if (undirected) {
+      graph.addEdge(dest,
+          new Edge<Integer, Integer>(vertex.getVertexId(), cost));
+    }
   }
 }

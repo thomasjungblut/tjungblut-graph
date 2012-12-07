@@ -16,7 +16,7 @@ public class CostVertexLineReaderTest extends TestCase {
   @Test
   public void testReader() throws IOException {
     CostVertexLineReader reader = new CostVertexLineReader(
-        "res/weighted_graph/edges.txt", ' ', 1);
+        "res/weighted_graph/edges.txt", ' ', 1, true);
     Optional<Graph<Integer, Integer, Integer>> absent = Optional.absent();
     Graph<Integer, Integer, Integer> graph = reader.readGraph(absent);
 
@@ -25,7 +25,7 @@ public class CostVertexLineReaderTest extends TestCase {
 
     assertEquals(500, graph.getNumVertices());
 
-    assertEquals(2184, graph.getNumEdges());
+    assertEquals(2184 * 2, graph.getNumEdges());
 
   }
 }
