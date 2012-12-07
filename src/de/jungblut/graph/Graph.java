@@ -31,6 +31,11 @@ public interface Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
       Edge<VERTEX_ID, EDGE_VALUE> adjacent);
 
   /**
+   * Adds a vertex with a no adjacents to it.
+   */
+  public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex);
+
+  /**
    * Adds a vertex with a list of adjacents to it.
    */
   public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
@@ -62,6 +67,11 @@ public interface Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
    * Gets all verte IDs associated with this graph.
    */
   public Set<VERTEX_ID> getVertexIDSet();
+
+  /**
+   * Adds an edge to a vertex.
+   */
+  public void addEdge(VERTEX_ID vertexId, Edge<VERTEX_ID, EDGE_VALUE> edge);
 
   /**
    * Get's a set of edges outbound from the given vertex id.

@@ -75,13 +75,22 @@ public final class AdjacencyList<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE>
   }
 
   @Override
-  public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
-      Edge<VERTEX_ID, EDGE_VALUE> adjacent) {
+  public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex) {
     vertexSet.add(vertex);
     vertexMap.put(vertex.getVertexId(), vertex);
-    edgeMultiMap.put(vertex.getVertexId(), adjacent);
-    adjacencyMultiMap.put(vertex.getVertexId(),
-        adjacent.getDestinationVertexID());
+  }
+
+  @Override
+  public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
+      Edge<VERTEX_ID, EDGE_VALUE> adjacent) {
+    addVertex(vertex);
+    addEdge(vertex.getVertexId(), adjacent);
+  }
+
+  @Override
+  public void addEdge(VERTEX_ID vertexId, Edge<VERTEX_ID, EDGE_VALUE> edge) {
+    edgeMultiMap.put(vertexId, edge);
+    adjacencyMultiMap.put(vertexId, edge.getDestinationVertexID());
   }
 
   @Override
