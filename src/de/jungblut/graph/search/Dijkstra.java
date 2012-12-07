@@ -13,7 +13,6 @@ import de.jungblut.graph.model.Vertex;
  * Dijkstra's algorithm in a graph implemented with a {@link PriorityQueue}.
  * 
  * @author thomas.jungblut
- * 
  */
 public final class Dijkstra<VERTEX_ID, VERTEX_VALUE> {
 
