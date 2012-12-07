@@ -89,5 +89,7 @@ public final class CostVertexLineReader implements
     VertexImpl<Integer, Integer> vertex = new VertexImpl<Integer, Integer>(id,
         null);
     graph.addVertex(vertex, new Edge<Integer, Integer>(dest, cost));
+    // take care that the destination is there
+    graph.addVertex(new VertexImpl<Integer, Integer>(dest, null));
   }
 }

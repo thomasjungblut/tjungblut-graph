@@ -23,7 +23,7 @@ public class CostVertexLineReaderTest extends TestCase {
     Vertex<Integer, Integer> vertex = graph.getVertex(1);
     assertNotNull(vertex);
 
-    assertEquals(499, graph.getNumVertices());
+    assertEquals(500, graph.getNumVertices());
 
     assertEquals(2184, graph.getNumEdges());
 
