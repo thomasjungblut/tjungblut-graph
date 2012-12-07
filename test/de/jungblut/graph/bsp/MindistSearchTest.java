@@ -27,7 +27,7 @@ import de.jungblut.graph.Graph;
 import de.jungblut.graph.TestGraphProvider;
 import de.jungblut.graph.bsp.MindistSearch.MindistSearchCountReader;
 import de.jungblut.graph.bsp.MindistSearch.MindistSearchVertex;
-import de.jungblut.graph.vertex.CostVertex;
+import de.jungblut.graph.model.Vertex;
 
 public final class MindistSearchTest extends TestCase {
 
@@ -82,10 +82,10 @@ public final class MindistSearchTest extends TestCase {
     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
         fs.create(in)));
 
-    Graph<CostVertex> wikipediaExampleGraph = TestGraphProvider
+    Graph<Integer, String, Integer> wikipediaExampleGraph = TestGraphProvider
         .getWikipediaExampleGraph();
-    for (CostVertex v : wikipediaExampleGraph.getVertexSet()) {
-      Set<CostVertex> adjacentVertices = wikipediaExampleGraph
+    for (Vertex<Integer, String> v : wikipediaExampleGraph.getVertexSet()) {
+      Set<Vertex<Integer, String>> adjacentVertices = wikipediaExampleGraph
           .getAdjacentVertices(v);
       writer.write(v.getVertexId() + "\t" + toString(adjacentVertices));
       writer.write('\n');
@@ -93,9 +93,9 @@ public final class MindistSearchTest extends TestCase {
     writer.close();
   }
 
-  private String toString(Set<CostVertex> adjacentVertices) {
+  private String toString(Set<Vertex<Integer, String>> adjacentVertices) {
     StringBuilder sb = new StringBuilder();
-    for (CostVertex v : adjacentVertices) {
+    for (Vertex<Integer, String> v : adjacentVertices) {
       sb.append(v.getVertexId());
       sb.append('\t');
     }

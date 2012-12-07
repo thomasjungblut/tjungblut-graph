@@ -9,18 +9,18 @@ import org.junit.Test;
 import com.google.common.base.Optional;
 
 import de.jungblut.graph.Graph;
-import de.jungblut.graph.vertex.CostVertex;
+import de.jungblut.graph.model.Vertex;
 
 public class CostVertexLineReaderTest extends TestCase {
 
   @Test
   public void testReader() throws IOException {
-    VertexReader<CostVertex> reader = new CostVertexLineReader(
+    CostVertexLineReader reader = new CostVertexLineReader(
         "res/weighted_graph/edges.txt", ' ', 1);
-    Optional<Graph<CostVertex>> absent = Optional.absent();
-    Graph<CostVertex> graph = reader.readGraph(absent);
+    Optional<Graph<Integer, Integer, Integer>> absent = Optional.absent();
+    Graph<Integer, Integer, Integer> graph = reader.readGraph(absent);
 
-    CostVertex vertex = graph.getVertex(1);
+    Vertex<Integer, Integer> vertex = graph.getVertex(1);
     assertNotNull(vertex);
 
     assertEquals(499, graph.getNumVertices());

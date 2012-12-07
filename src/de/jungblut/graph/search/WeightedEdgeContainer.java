@@ -5,43 +5,40 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import de.jungblut.graph.Graph;
-import de.jungblut.graph.vertex.Vertex;
-
 /**
  * Container class for the shortest path and its costs.
  * 
  * @author thomas.jungblut
  */
-public final class WeightedEdgeContainer<V extends Vertex> {
+public final class WeightedEdgeContainer<VERTEX_ID, EDGE_VALUE> {
 
-  private final HashMap<V, Integer> path;
-  private final HashMap<V, V> ancestors;
+  private final HashMap<VERTEX_ID, EDGE_VALUE> path;
+  private final HashMap<VERTEX_ID, VERTEX_ID> ancestors;
 
-  public WeightedEdgeContainer(HashMap<V, Integer> path, HashMap<V, V> ancestors) {
+  public WeightedEdgeContainer(HashMap<VERTEX_ID, EDGE_VALUE> path,
+      HashMap<VERTEX_ID, VERTEX_ID> ancestors) {
     super();
     this.path = path;
     this.ancestors = ancestors;
   }
 
-  public HashMap<V, V> getAncestors() {
+  public HashMap<VERTEX_ID, VERTEX_ID> getAncestors() {
     return ancestors;
   }
 
-  public HashMap<V, Integer> getPath() {
+  public HashMap<VERTEX_ID, EDGE_VALUE> getPath() {
     return path;
   }
 
   /**
    * Reconstructs the found path.
    * 
-   * @param g the graph to use.
    * @param end the end vertex to reconstruct the path from
    * @return the path with the visited vertices.
    */
-  public List<V> reconstructPath(Graph<V> g, V end) {
-    List<V> list = Lists.newArrayList();
-    V predecessor = end;
+  public List<VERTEX_ID> reconstructPath(VERTEX_ID end) {
+    List<VERTEX_ID> list = Lists.newArrayList();
+    VERTEX_ID predecessor = end;
     while ((predecessor = ancestors.get(predecessor)) != null) {
       list.add(predecessor);
     }

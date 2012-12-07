@@ -7,16 +7,17 @@ import com.google.common.base.Optional;
 
 import de.jungblut.graph.AdjacencyList;
 import de.jungblut.graph.Graph;
-import de.jungblut.graph.vertex.Vertex;
 
 /**
  * Reader interface for vertices.
  * 
  * @author thomas.jungblut
  * 
- * @param <V> the type of the vertex to read.
+ * @param <VERTEX_ID> the vertex id type.
+ * @param <VERTEX_VALUE> the vertex value type.
+ * @param <EDGE_VALUE> the edge value type.
  */
-public interface VertexReader<V extends Vertex> {
+public interface VertexReader<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
 
   /**
    * Reads the graph from a artificial resource.
@@ -27,7 +28,8 @@ public interface VertexReader<V extends Vertex> {
    * @throws IOException in case of a {@link FileNotFoundException} or some
    *           other IO Error.
    */
-  public Graph<V> readGraph(Optional<Graph<V>> optionalGraph)
+  public Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> readGraph(
+      Optional<Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE>> optionalGraph)
       throws IOException;
 
 }

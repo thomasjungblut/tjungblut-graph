@@ -26,7 +26,8 @@ import de.jungblut.graph.Graph;
 import de.jungblut.graph.TestGraphProvider;
 import de.jungblut.graph.bsp.SSSP.SSSPTextReader;
 import de.jungblut.graph.bsp.SSSP.ShortestPathVertex;
-import de.jungblut.graph.vertex.CostVertex;
+import de.jungblut.graph.model.Edge;
+import de.jungblut.graph.model.Vertex;
 
 public final class SSSPTest extends TestCase {
 
@@ -83,23 +84,23 @@ public final class SSSPTest extends TestCase {
     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
         fs.create(in)));
 
-    Graph<CostVertex> wikipediaExampleGraph = TestGraphProvider
+    Graph<Integer, String, Integer> wikipediaExampleGraph = TestGraphProvider
         .getWikipediaExampleGraph();
-    for (CostVertex v : wikipediaExampleGraph.getVertexSet()) {
-      Set<CostVertex> adjacentVertices = wikipediaExampleGraph
-          .getAdjacentVertices(v);
+    for (Vertex<Integer, String> v : wikipediaExampleGraph.getVertexSet()) {
+      Set<Edge<Integer, Integer>> adjacentVertices = wikipediaExampleGraph
+          .getEdges(v.getVertexId());
       writer.write(v.getVertexId() + "\t" + toString(adjacentVertices));
       writer.write('\n');
     }
     writer.close();
   }
 
-  private String toString(Set<CostVertex> adjacentVertices) {
+  private String toString(Set<Edge<Integer, Integer>> adjacentVertices) {
     StringBuilder sb = new StringBuilder();
-    for (CostVertex v : adjacentVertices) {
-      sb.append(v.getVertexId());
+    for (Edge<Integer, Integer> v : adjacentVertices) {
+      sb.append(v.getDestinationVertexID());
       sb.append(':');
-      sb.append(v.getCost());
+      sb.append(v.getValue());
       sb.append('\t');
     }
     return sb.toString();

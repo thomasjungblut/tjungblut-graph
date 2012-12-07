@@ -1,14 +1,15 @@
 package de.jungblut.graph;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Sets;
 
-import de.jungblut.graph.vertex.Vertex;
+import de.jungblut.graph.model.Edge;
+import de.jungblut.graph.model.Vertex;
 
 /**
  * Adjacency list implementation for sparse graphs like the webgraph. This is
@@ -16,43 +17,96 @@ import de.jungblut.graph.vertex.Vertex;
  * 
  * @author thomas.jungblut
  * 
- * @param <V> the type of {@link Vertex} to use.
+ * @param <VERTEX_ID> the vertex id type.
+ * @param <VERTEX_VALUE> the vertex value type.
+ * @param <EDGE_VALUE> the edge value type.
  */
-public final class AdjacencyList<V extends Vertex> implements Graph<V> {
+public final class AdjacencyList<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE>
+    implements Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
 
-  private final HashSet<V> vertexSet = new HashSet<>();
-  private final HashMap<Integer, V> vertexMap = new HashMap<>();
-  private final HashMultimap<Integer, V> adjacencyList = HashMultimap.create();
+  private final HashSet<Vertex<VERTEX_ID, VERTEX_VALUE>> vertexSet = new HashSet<>();
+  private final HashMap<VERTEX_ID, Vertex<VERTEX_ID, VERTEX_VALUE>> vertexMap = new HashMap<>();
+  private final HashMultimap<VERTEX_ID, VERTEX_ID> adjacencyMultiMap = HashMultimap
+      .create();
+  private final HashMultimap<VERTEX_ID, Edge<VERTEX_ID, EDGE_VALUE>> edgeMultiMap = HashMultimap
+      .create();
 
   @Override
-  public Set<V> getAdjacentVertices(int vertexId) {
-    return adjacencyList.get(vertexId);
+  public Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getAdjacentVertices(
+      VERTEX_ID vertexId) {
+    Set<VERTEX_ID> set = adjacencyMultiMap.get(vertexId);
+    Set<Vertex<VERTEX_ID, VERTEX_VALUE>> toReturn = Sets.newHashSet();
+    for (VERTEX_ID id : set) {
+      toReturn.add(getVertex(id));
+    }
+    return toReturn;
   }
 
   @Override
-  public Set<V> getAdjacentVertices(V vertex) {
-    return adjacencyList.get(vertex.getVertexId());
+  public Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getAdjacentVertices(
+      Vertex<VERTEX_ID, VERTEX_VALUE> vertex) {
+    return getAdjacentVertices(vertex.getVertexId());
   }
 
   @Override
-  public Set<V> getVertexSet() {
+  public Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getVertexSet() {
     return vertexSet;
   }
 
   @Override
-  public void addVertex(V vertex, @SuppressWarnings("unchecked") V... adjacents) {
-    addVertex(vertex, Arrays.asList(adjacents));
+  public Set<VERTEX_ID> getVertexIDSet() {
+    return vertexMap.keySet();
   }
 
   @Override
-  public void addVertex(V vertex, List<V> adjacents) {
+  public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
+      @SuppressWarnings("unchecked") Edge<VERTEX_ID, EDGE_VALUE>... adjacents) {
+    for (Edge<VERTEX_ID, EDGE_VALUE> edge : adjacents) {
+      addVertex(vertex, edge);
+    }
+  }
+
+  @Override
+  public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
+      List<Edge<VERTEX_ID, EDGE_VALUE>> adjacents) {
+    for (Edge<VERTEX_ID, EDGE_VALUE> edge : adjacents) {
+      addVertex(vertex, edge);
+    }
+  }
+
+  @Override
+  public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
+      Edge<VERTEX_ID, EDGE_VALUE> adjacent) {
+    vertexSet.add(vertex);
     vertexMap.put(vertex.getVertexId(), vertex);
-    vertexSet.addAll(adjacents);
-    adjacencyList.putAll(vertex.getVertexId(), adjacents);
+    edgeMultiMap.put(vertex.getVertexId(), adjacent);
+    adjacencyMultiMap.put(vertex.getVertexId(),
+        adjacent.getDestinationVertexID());
   }
 
   @Override
-  public V getVertex(int vertexId) {
+  public Set<Edge<VERTEX_ID, EDGE_VALUE>> getEdges(VERTEX_ID vertexId) {
+    return edgeMultiMap.get(vertexId);
+  }
+
+  @Override
+  public Set<Edge<VERTEX_ID, EDGE_VALUE>> getEdges(
+      Vertex<VERTEX_ID, VERTEX_VALUE> vertex) {
+    return getEdges(vertex.getVertexId());
+  }
+
+  @Override
+  public Edge<VERTEX_ID, EDGE_VALUE> getEdge(VERTEX_ID source, VERTEX_ID dest) {
+    Set<Edge<VERTEX_ID, EDGE_VALUE>> set = edgeMultiMap.get(source);
+    for (Edge<VERTEX_ID, EDGE_VALUE> e : set) {
+      if (e.getDestinationVertexID().equals(dest))
+        return e;
+    }
+    return null;
+  }
+
+  @Override
+  public Vertex<VERTEX_ID, VERTEX_VALUE> getVertex(VERTEX_ID vertexId) {
     return vertexMap.get(vertexId);
   }
 
@@ -63,7 +117,7 @@ public final class AdjacencyList<V extends Vertex> implements Graph<V> {
 
   @Override
   public int getNumEdges() {
-    return adjacencyList.size();
+    return adjacencyMultiMap.size();
   }
 
   @Override

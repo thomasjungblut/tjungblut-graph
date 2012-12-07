@@ -8,13 +8,13 @@ import com.google.common.collect.ContiguousSet;
 import com.google.common.collect.DiscreteDomains;
 import com.google.common.collect.Ranges;
 
-import de.jungblut.graph.vertex.CostVertex;
+import de.jungblut.graph.model.Vertex;
 
 public class AdjacencyListTest extends TestCase {
 
   @Test
   public void testGraphRepresentation() {
-    Graph<CostVertex> wikipediaExampleGraph = TestGraphProvider
+    Graph<Integer, String, Integer> wikipediaExampleGraph = TestGraphProvider
         .getWikipediaExampleGraph();
     ContiguousSet<Integer> set = Ranges.open(0, 9).asSet(
         DiscreteDomains.integers());
@@ -24,7 +24,7 @@ public class AdjacencyListTest extends TestCase {
     assertEquals(21, wikipediaExampleGraph.getNumEdges());
 
     for (Integer i : set) {
-      CostVertex vertex = wikipediaExampleGraph.getVertex(i);
+      Vertex<Integer, String> vertex = wikipediaExampleGraph.getVertex(i);
       assertNotNull(vertex);
     }
 

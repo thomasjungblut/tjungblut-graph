@@ -9,7 +9,8 @@ import com.google.common.base.Optional;
 
 import de.jungblut.graph.AdjacencyList;
 import de.jungblut.graph.Graph;
-import de.jungblut.graph.vertex.CostVertex;
+import de.jungblut.graph.model.Edge;
+import de.jungblut.graph.model.VertexImpl;
 
 /**
  * Vertex Reader that parses a line of text into a cost vertex. <br/>
@@ -19,7 +20,8 @@ import de.jungblut.graph.vertex.CostVertex;
  * 
  * @author thomas.jungblut
  */
-public final class CostVertexLineReader implements VertexReader<CostVertex> {
+public final class CostVertexLineReader implements
+    VertexReader<Integer, Integer, Integer> {
 
   private final Pattern splitPattern;
   private String path;
@@ -48,10 +50,11 @@ public final class CostVertexLineReader implements VertexReader<CostVertex> {
   }
 
   @Override
-  public Graph<CostVertex> readGraph(Optional<Graph<CostVertex>> optionalGraph)
+  public Graph<Integer, Integer, Integer> readGraph(
+      Optional<Graph<Integer, Integer, Integer>> optionalGraph)
       throws IOException {
     // check if graph is not absent
-    Graph<CostVertex> graph;
+    Graph<Integer, Integer, Integer> graph;
     if (optionalGraph.isPresent()) {
       graph = optionalGraph.get();
     } else {
@@ -78,11 +81,13 @@ public final class CostVertexLineReader implements VertexReader<CostVertex> {
    * Parses a line and constructs a new vertex that is filled and put into the
    * graph.
    */
-  private void parseLine(Graph<CostVertex> graph, String line) {
+  private void parseLine(Graph<Integer, Integer, Integer> graph, String line) {
     String[] split = splitPattern.split(line);
     int id = Integer.parseInt(split[0]);
     int dest = Integer.parseInt(split[1]);
     int cost = Integer.parseInt(split[2]);
-    graph.addVertex(new CostVertex(id, 0), new CostVertex(dest, cost));
+    VertexImpl<Integer, Integer> vertex = new VertexImpl<Integer, Integer>(id,
+        null);
+    graph.addVertex(vertex, new Edge<Integer, Integer>(dest, cost));
   }
 }

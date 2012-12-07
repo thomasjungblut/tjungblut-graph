@@ -3,19 +3,19 @@ package de.jungblut.graph.search;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.PriorityQueue;
 
 import de.jungblut.graph.Graph;
-import de.jungblut.graph.vertex.CostVertex;
+import de.jungblut.graph.model.Edge;
+import de.jungblut.graph.model.Vertex;
 
 /**
- * Basic Dijkstra's algorithm in a graph.
+ * Dijkstra's algorithm in a graph implemented with a {@link PriorityQueue}.
  * 
  * @author thomas.jungblut
  * 
  */
-public final class Dijkstra {
+public final class Dijkstra<VERTEX_ID, VERTEX_VALUE> {
 
   /**
    * Finds the shortest paths from the start vertex in the given path by doing
@@ -23,28 +23,31 @@ public final class Dijkstra {
    * 
    * @return a container that includes the path and the costs.
    */
-  public static WeightedEdgeContainer<CostVertex> findShortestPaths(
-      Graph<CostVertex> graph, CostVertex start) {
+  public WeightedEdgeContainer<VERTEX_ID, Integer> findShortestPaths(
+      Graph<VERTEX_ID, VERTEX_VALUE, Integer> graph, VERTEX_ID start) {
     // some datastructure needed
-    PriorityQueue<DijkstraPair> distance = new PriorityQueue<>();
-    HashMap<CostVertex, Integer> pathDistance = new HashMap<>();
-    HashMap<CostVertex, CostVertex> ancestors = new HashMap<>();
-    HashSet<CostVertex> vertices = new HashSet<>();
+    PriorityQueue<DijkstraPair<VERTEX_ID>> distance = new PriorityQueue<>();
+    HashMap<VERTEX_ID, Integer> pathDistance = new HashMap<>();
+    HashMap<VERTEX_ID, VERTEX_ID> ancestors = new HashMap<>();
+    HashSet<VERTEX_ID> vertices = new HashSet<>();
 
     // initialize them
     initialize(graph, start, distance, ancestors, vertices);
 
     // main algorithm
     while (!vertices.isEmpty()) {
-      DijkstraPair u = distance.poll();
-      vertices.remove(u.vertex);
-      for (CostVertex v : graph.getAdjacentVertices(u.vertex.getVertexId())) {
-        if (vertices.contains(v)) {
-          updateDistance(graph, distance, u, v, pathDistance, ancestors);
+      DijkstraPair<VERTEX_ID> u = distance.poll();
+      vertices.remove(u.vertexId);
+      for (Vertex<VERTEX_ID, VERTEX_VALUE> v : graph
+          .getAdjacentVertices(u.vertexId)) {
+        if (vertices.contains(v.getVertexId())) {
+          updateDistance(graph.getEdge(u.vertexId, v.getVertexId()), distance,
+              u, v, pathDistance, ancestors);
         }
       }
     }
-    return new WeightedEdgeContainer<CostVertex>(pathDistance, ancestors);
+    return new WeightedEdgeContainer<VERTEX_ID, Integer>(pathDistance,
+        ancestors);
   }
 
   /**
@@ -53,18 +56,19 @@ public final class Dijkstra {
    * zero and adds a null ancestor for the start. Also this fills the vertices
    * set by adding all known vertices in this graph.
    */
-  private static void initialize(Graph<CostVertex> g, CostVertex start,
-      PriorityQueue<DijkstraPair> distance,
-      Map<CostVertex, CostVertex> ancestors, HashSet<CostVertex> vertices) {
+  private void initialize(Graph<VERTEX_ID, VERTEX_VALUE, Integer> g,
+      VERTEX_ID start, PriorityQueue<DijkstraPair<VERTEX_ID>> distance,
+      HashMap<VERTEX_ID, VERTEX_ID> ancestors, HashSet<VERTEX_ID> vertices) {
     // initialize the matrix with infinity = max_value
-    for (CostVertex v : g.getVertexSet()) {
-      if (v.getVertexId() != start.getVertexId()) {
-        distance.add(new DijkstraPair(v, Integer.MAX_VALUE));
+    for (Vertex<VERTEX_ID, VERTEX_VALUE> v : g.getVertexSet()) {
+      if (!v.getVertexId().equals(start)) {
+        distance.add(new DijkstraPair<VERTEX_ID>(v.getVertexId(),
+            Integer.MAX_VALUE));
       }
     }
-    vertices.addAll(g.getVertexSet());
+    vertices.addAll(g.getVertexIDSet());
     // set the distance from start to start to zero
-    distance.add(new DijkstraPair(start, 0));
+    distance.add(new DijkstraPair<VERTEX_ID>(start, 0));
     // set the ancestors for start to null, cause it never gets them
     ancestors.put(start, null);
   }
@@ -76,49 +80,51 @@ public final class Dijkstra {
    * the update needs to be done. Also an ancestor is getting created for the
    * given vertex.
    * 
-   * @param u the origin vertex/distance pair
+   * @param u the origin vertex
    * @param v the target vertex
    */
-  private static void updateDistance(Graph<CostVertex> g,
-      PriorityQueue<DijkstraPair> distance, DijkstraPair u, CostVertex v,
-      HashMap<CostVertex, Integer> path,
-      HashMap<CostVertex, CostVertex> ancestors) {
-    int summedLength = u.distance + v.getCost();
+  private void updateDistance(Edge<VERTEX_ID, Integer> edge,
+      PriorityQueue<DijkstraPair<VERTEX_ID>> distance,
+      DijkstraPair<VERTEX_ID> u, Vertex<VERTEX_ID, VERTEX_VALUE> v,
+      HashMap<VERTEX_ID, Integer> path, HashMap<VERTEX_ID, VERTEX_ID> ancestors) {
+    int summedLength = u.distance + edge.getValue();
     // usually we have no length associated because we haven't visited this
     // vertex v, in this case currentLength is null
-    Integer currentLength = path.get(v);
+    Integer currentLength = path.get(v.getVertexId());
     if (currentLength == null || summedLength < currentLength) {
-      path.put(v, summedLength);
+      path.put(v.getVertexId(), summedLength);
       // seek for the item v in the prio queue and remove
-      Iterator<DijkstraPair> iterator = distance.iterator();
+      Iterator<DijkstraPair<VERTEX_ID>> iterator = distance.iterator();
       while (iterator.hasNext()) {
-        if (iterator.next().vertex.getVertexId() == v.getVertexId()) {
+        if (iterator.next().vertexId.equals(v.getVertexId())) {
           iterator.remove();
           break;
         }
       }
       // add it again to the heap to be priotized correctly
-      distance.add(new DijkstraPair(v, summedLength));
-      ancestors.put(v, u.vertex);
+      distance.add(new DijkstraPair<VERTEX_ID>(v.getVertexId(), summedLength));
+      ancestors.put(v.getVertexId(), u.vertexId);
     }
+
   }
 
   /**
    * Just a simple pair for the priority queue.
    */
-  static class DijkstraPair implements Comparable<DijkstraPair> {
+  static final class DijkstraPair<VERTEX_ID> implements
+      Comparable<DijkstraPair<VERTEX_ID>> {
 
-    CostVertex vertex;
+    VERTEX_ID vertexId;
     int distance;
 
-    public DijkstraPair(CostVertex vertex, int distance) {
+    public DijkstraPair(VERTEX_ID vertex, int distance) {
       super();
-      this.vertex = vertex;
+      this.vertexId = vertex;
       this.distance = distance;
     }
 
     @Override
-    public int compareTo(DijkstraPair o) {
+    public int compareTo(DijkstraPair<VERTEX_ID> o) {
       return Integer.compare(distance, o.distance);
     }
 
@@ -127,6 +133,10 @@ public final class Dijkstra {
       return distance + "";
     }
 
+  }
+
+  public static final <VERTEX_ID, VERTEX_VALUE> Dijkstra<VERTEX_ID, VERTEX_VALUE> getInstance() {
+    return new Dijkstra<VERTEX_ID, VERTEX_VALUE>();
   }
 
 }

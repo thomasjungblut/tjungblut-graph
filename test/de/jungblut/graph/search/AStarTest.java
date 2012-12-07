@@ -9,28 +9,29 @@ import org.junit.Test;
 
 import de.jungblut.graph.Graph;
 import de.jungblut.graph.TestGraphProvider;
-import de.jungblut.graph.vertex.CostVertex;
 
 public class AStarTest extends TestCase {
 
   @Test
   public void testAStarSearch() throws Exception {
-    Graph<CostVertex> g = TestGraphProvider.getWikipediaExampleGraph();
-
-    WeightedEdgeContainer<CostVertex> container = AStar.startAStarSearch(g,
-        g.getVertex(0), g.getVertex(9));
+    Graph<Integer, String, Integer> g = TestGraphProvider
+        .getWikipediaExampleGraph();
+    AStar<Integer, String> instance = AStar.getInstance();
+    WeightedEdgeContainer<Integer, Integer> container = instance
+        .startAStarSearch(g, g.getVertex(0).getVertexId(), g.getVertex(9)
+            .getVertexId());
 
     int[] costs = new int[] { 0, 85, 217, 503, 173, 165, 403, 320, 415, 487 };
-    for (Entry<CostVertex, Integer> entry : container.getPath().entrySet()) {
-      assertEquals(costs[entry.getKey().getVertexId()], entry.getValue()
-          .intValue());
+    for (Entry<Integer, Integer> entry : container.getPath().entrySet()) {
+      assertEquals(costs[entry.getKey()], entry.getValue().intValue());
     }
 
     int[] pathIds = new int[] { 7, 2, 0 };
     int index = 0;
-    List<CostVertex> path = container.reconstructPath(g, g.getVertex(9));
-    for (CostVertex entry : path) {
-      assertEquals(pathIds[index++], entry.getVertexId());
+    List<Integer> path = container
+        .reconstructPath(g.getVertex(9).getVertexId());
+    for (Integer entry : path) {
+      assertEquals(pathIds[index++], entry.intValue());
     }
   }
 
