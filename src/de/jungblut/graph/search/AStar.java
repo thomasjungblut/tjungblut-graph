@@ -127,8 +127,9 @@ public final class AStar<VERTEX_ID, VERTEX_VALUE> {
         VERTEX_ID start, VERTEX_ID goal) {
       double startWeight = averageEdgeWeights(g, start);
       double goalWeight = averageEdgeWeights(g, goal);
+      double diff = startWeight - goalWeight;
       // pow the result by 2
-      double c = Math.pow((startWeight - goalWeight), 2);
+      double c = diff * diff;
       // absolute the distance
       return Math.abs(c - startWeight);
     }
