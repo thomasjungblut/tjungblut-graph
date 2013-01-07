@@ -4,9 +4,11 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import com.google.common.collect.AbstractIterator;
 
+import de.jungblut.graph.model.Edge;
 import de.jungblut.graph.model.Vertex;
 
 /**
@@ -16,6 +18,20 @@ import de.jungblut.graph.model.Vertex;
  * 
  */
 public final class GraphWalker {
+
+  /**
+   * Returns a iterator over edges in a graph. The order is not preserved.
+   * 
+   * @param graph the graph.
+   * @param vertices the vertices in that graph. (might only a subgraph).
+   * @return an iterator that cycles through all the edges of the given
+   *         vertices.
+   */
+  public static <VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> Iterator<Tuple<VERTEX_ID, Edge<VERTEX_ID, EDGE_VALUE>>> iterateEdges(
+      Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> graph, Set<VERTEX_ID> vertices) {
+    return new EdgeIterator<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE>(graph,
+        vertices);
+  }
 
   /**
    * Returns a depth first search iterator on this graph from the given start
@@ -98,6 +114,41 @@ public final class GraphWalker {
         return endOfData();
       }
     }
+  }
+
+  /**
+   * Iterator over edges, uses the list of all vertices to loop over their
+   * edges.
+   */
+  private static final class EdgeIterator<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE>
+      extends AbstractIterator<Tuple<VERTEX_ID, Edge<VERTEX_ID, EDGE_VALUE>>> {
+
+    private Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> graph;
+    private Iterator<VERTEX_ID> iterator;
+    private Deque<Edge<VERTEX_ID, EDGE_VALUE>> currentEdges = new ArrayDeque<>();
+    private VERTEX_ID current;
+
+    public EdgeIterator(Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> graph,
+        Set<VERTEX_ID> vertices) {
+      this.graph = graph;
+      this.iterator = vertices.iterator();
+    }
+
+    @Override
+    protected Tuple<VERTEX_ID, Edge<VERTEX_ID, EDGE_VALUE>> computeNext() {
+      if (currentEdges.isEmpty()) {
+        if (iterator.hasNext()) {
+          this.current = iterator.next();
+          currentEdges.addAll(graph.getEdges(current));
+          return new Tuple<>(current, currentEdges.pop());
+        } else {
+          return endOfData();
+        }
+      } else {
+        return new Tuple<>(current, currentEdges.pop());
+      }
+    }
+
   }
 
 }

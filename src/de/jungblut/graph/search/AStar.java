@@ -22,7 +22,7 @@ public final class AStar<VERTEX_ID, VERTEX_VALUE> {
    * vertex. The heuristic distance measurer is based on the average edge weight
    * of start and end node.
    */
-  public WeightedEdgeContainer<VERTEX_ID, Integer> startAStarSearch(
+  public WeightedEdgeContainer<VERTEX_ID> startAStarSearch(
       Graph<VERTEX_ID, VERTEX_VALUE, Integer> g, VERTEX_ID start, VERTEX_ID goal) {
     return startAStarSearch(g, start, goal, DEFAULT_MEASURER);
   }
@@ -31,7 +31,7 @@ public final class AStar<VERTEX_ID, VERTEX_VALUE> {
    * Executes an A* search in a graph. It needs a graph, the start and end
    * vertex as well as a heuristic distance measurer.
    */
-  public WeightedEdgeContainer<VERTEX_ID, Integer> startAStarSearch(
+  public WeightedEdgeContainer<VERTEX_ID> startAStarSearch(
       Graph<VERTEX_ID, VERTEX_VALUE, Integer> g, VERTEX_ID start,
       VERTEX_ID goal,
       DistanceMeasurer<VERTEX_ID, VERTEX_VALUE, Integer> measurer) {
@@ -56,7 +56,7 @@ public final class AStar<VERTEX_ID, VERTEX_VALUE> {
     while (!openSet.isEmpty()) {
       VERTEX_ID v = findLowest(openSet, f_score);
       if (v.equals(goal)) {
-        return new WeightedEdgeContainer<VERTEX_ID, Integer>(g_score, cameFrom);
+        return new WeightedEdgeContainer<VERTEX_ID>(g_score, cameFrom);
       } else {
         openSet.remove(v);
         closedSet.add(v);
@@ -152,7 +152,7 @@ public final class AStar<VERTEX_ID, VERTEX_VALUE> {
     }
   }
 
-  public static final <VERTEX_ID, VERTEX_VALUE> AStar<VERTEX_ID, VERTEX_VALUE> getInstance() {
+  public static final <VERTEX_ID, VERTEX_VALUE> AStar<VERTEX_ID, VERTEX_VALUE> newInstance() {
     return new AStar<VERTEX_ID, VERTEX_VALUE>();
   }
 

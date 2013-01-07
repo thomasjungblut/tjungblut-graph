@@ -23,11 +23,12 @@ public final class Dijkstra<VERTEX_ID, VERTEX_VALUE> {
    * 
    * @return a container that includes the path and the costs.
    */
-  public WeightedEdgeContainer<VERTEX_ID, Integer> findShortestPaths(
+  public WeightedEdgeContainer<VERTEX_ID> findShortestPaths(
       Graph<VERTEX_ID, VERTEX_VALUE, Integer> graph, VERTEX_ID start) {
     // some datastructure needed
     PriorityQueue<IdCostTuple<VERTEX_ID>> distance = new PriorityQueue<>();
     HashMap<VERTEX_ID, Integer> pathDistance = new HashMap<>();
+    pathDistance.put(start, 0);
     HashMap<VERTEX_ID, VERTEX_ID> ancestors = new HashMap<>();
     HashSet<VERTEX_ID> vertices = new HashSet<>();
 
@@ -46,8 +47,7 @@ public final class Dijkstra<VERTEX_ID, VERTEX_VALUE> {
         }
       }
     }
-    return new WeightedEdgeContainer<VERTEX_ID, Integer>(pathDistance,
-        ancestors);
+    return new WeightedEdgeContainer<>(pathDistance, ancestors);
   }
 
   /**
@@ -56,19 +56,24 @@ public final class Dijkstra<VERTEX_ID, VERTEX_VALUE> {
    * zero and adds a null ancestor for the start. Also this fills the vertices
    * set by adding all known vertices in this graph.
    */
-  private void initialize(Graph<VERTEX_ID, VERTEX_VALUE, Integer> g,
-      VERTEX_ID start, PriorityQueue<IdCostTuple<VERTEX_ID>> distance,
+  static <VERTEX_ID, VERTEX_VALUE> void initialize(
+      Graph<VERTEX_ID, VERTEX_VALUE, Integer> g, VERTEX_ID start,
+      PriorityQueue<IdCostTuple<VERTEX_ID>> distance,
       HashMap<VERTEX_ID, VERTEX_ID> ancestors, HashSet<VERTEX_ID> vertices) {
     // initialize the matrix with infinity = max_value
-    for (Vertex<VERTEX_ID, VERTEX_VALUE> v : g.getVertexSet()) {
-      if (!v.getVertexId().equals(start)) {
-        distance.add(new IdCostTuple<VERTEX_ID>(v.getVertexId(),
-            Integer.MAX_VALUE));
+    if (distance != null) {
+      for (Vertex<VERTEX_ID, VERTEX_VALUE> v : g.getVertexSet()) {
+        if (!v.getVertexId().equals(start)) {
+          distance.add(new IdCostTuple<VERTEX_ID>(v.getVertexId(),
+              Integer.MAX_VALUE));
+        }
       }
+      distance.add(new IdCostTuple<VERTEX_ID>(start, 0));
     }
-    vertices.addAll(g.getVertexIDSet());
+    if (vertices != null) {
+      vertices.addAll(g.getVertexIDSet());
+    }
     // set the distance from start to start to zero
-    distance.add(new IdCostTuple<VERTEX_ID>(start, 0));
     // set the ancestors for start to null, cause it never gets them
     ancestors.put(start, null);
   }
@@ -108,7 +113,7 @@ public final class Dijkstra<VERTEX_ID, VERTEX_VALUE> {
 
   }
 
-  public static final <VERTEX_ID, VERTEX_VALUE> Dijkstra<VERTEX_ID, VERTEX_VALUE> getInstance() {
+  public static final <VERTEX_ID, VERTEX_VALUE> Dijkstra<VERTEX_ID, VERTEX_VALUE> newInstance() {
     return new Dijkstra<VERTEX_ID, VERTEX_VALUE>();
   }
 

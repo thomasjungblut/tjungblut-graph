@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
+import de.jungblut.graph.model.Edge;
 import de.jungblut.graph.model.VertexImpl;
 
 public class GraphWalkerTest extends TestCase {
@@ -41,6 +42,25 @@ public class GraphWalkerTest extends TestCase {
     while (it.hasNext()) {
       VertexImpl<Integer, String> next = it.next();
       assertEquals(iterationIds[index++], next.getVertexId().intValue());
+    }
+  }
+
+  @Test
+  public void testEdgeTraversal() throws Exception {
+
+    Graph<Integer, String, Integer> g = TestGraphProvider
+        .getWikipediaExampleGraph();
+    Iterator<Tuple<Integer, Edge<Integer, Integer>>> it = GraphWalker
+        .iterateEdges(g, g.getVertexIDSet());
+    // this actually might have order involved, which is not guranteed by the
+    // walker
+    int[] iterationIds = new int[] { 4, 1, 2, 5, 0, 7, 0, 6, 7, 9, 8, 1, 2, 3,
+        9, 2, 9, 5, 7, 8, 4, };
+    int index = 0;
+    while (it.hasNext()) {
+      Tuple<Integer, Edge<Integer, Integer>> next = it.next();
+      assertEquals(iterationIds[index++], next.getSecond()
+          .getDestinationVertexID().intValue());
     }
   }
 }

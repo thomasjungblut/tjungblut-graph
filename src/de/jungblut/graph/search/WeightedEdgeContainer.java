@@ -10,24 +10,33 @@ import com.google.common.collect.Lists;
  * 
  * @author thomas.jungblut
  */
-public final class WeightedEdgeContainer<VERTEX_ID, EDGE_VALUE> {
+public final class WeightedEdgeContainer<VERTEX_ID> {
 
-  private final HashMap<VERTEX_ID, EDGE_VALUE> path;
+  private final HashMap<VERTEX_ID, Integer> pathCosts;
   private final HashMap<VERTEX_ID, VERTEX_ID> ancestors;
 
-  public WeightedEdgeContainer(HashMap<VERTEX_ID, EDGE_VALUE> path,
+  public WeightedEdgeContainer(HashMap<VERTEX_ID, Integer> costs,
       HashMap<VERTEX_ID, VERTEX_ID> ancestors) {
     super();
-    this.path = path;
+    this.pathCosts = costs;
     this.ancestors = ancestors;
   }
 
+  /**
+   * @return a map that contains VERTEX_ID to VERTEX_ID relation denoting the
+   *         predecessor on the right (value) side and the successor on the key
+   *         side.
+   */
   public HashMap<VERTEX_ID, VERTEX_ID> getAncestors() {
     return ancestors;
   }
 
-  public HashMap<VERTEX_ID, EDGE_VALUE> getPath() {
-    return path;
+  /**
+   * @return a map that contains VERTEX_ID to cost mapping. It represents the
+   *         cost that needs to be spend to reach a given vertex.
+   */
+  public HashMap<VERTEX_ID, Integer> getPathCosts() {
+    return pathCosts;
   }
 
   /**
