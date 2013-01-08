@@ -12,8 +12,6 @@ import de.jungblut.graph.TestGraphProvider;
 
 public class BellmanFordTest extends TestCase {
 
-  // TODO needs a test for negative cycles..
-
   @Test
   public void testShortestPaths() throws Exception {
 
