@@ -17,9 +17,8 @@ public class AStarTest extends TestCase {
     Graph<Integer, String, Integer> g = TestGraphProvider
         .getWikipediaExampleGraph();
     AStar<Integer, String> instance = AStar.newInstance();
-    WeightedEdgeContainer<Integer> container = instance
-        .startAStarSearch(g, g.getVertex(0).getVertexId(), g.getVertex(9)
-            .getVertexId());
+    WeightedEdgeContainer<Integer> container = instance.startAStarSearch(g, g
+        .getVertex(0).getVertexId(), g.getVertex(9).getVertexId());
 
     int[] costs = new int[] { 0, 85, 217, 503, 173, 165, 403, 320, 415, 487 };
     for (Entry<Integer, Integer> entry : container.getPathCosts().entrySet()) {

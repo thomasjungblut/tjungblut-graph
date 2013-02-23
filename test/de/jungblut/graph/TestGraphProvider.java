@@ -73,12 +73,60 @@ public class TestGraphProvider {
         .getVertexId(), 84));
 
     // muenchen -> nuernberg, kassel, augsburg
-    graph.addVertex(cities.get(9),
-
-    new Edge<Integer, Integer>(cities.get(7).getVertexId(), 167),
-        new Edge<Integer, Integer>(cities.get(4).getVertexId(), 173),
-        new Edge<Integer, Integer>(cities.get(8).getVertexId(), 84));
+    graph.addVertex(cities.get(9), new Edge<Integer, Integer>(cities.get(7)
+        .getVertexId(), 167), new Edge<Integer, Integer>(cities.get(4)
+        .getVertexId(), 173), new Edge<Integer, Integer>(cities.get(8)
+        .getVertexId(), 84));
 
     return graph;
   }
+
+  /**
+   * from {@link http://en.wikipedia.org/wiki/Topological_sorting}
+   */
+  @SuppressWarnings("unchecked")
+  public static Graph<Integer, String, Integer> getTopologicalSortWikipediaExampleGraph() {
+    Graph<Integer, String, Integer> graph = new AdjacencyList<>();
+
+    ArrayList<VertexImpl<Integer, String>> cities = new ArrayList<>();
+
+    // 7, 5, 3, 11, 8, 2, 9, 10
+    cities.add(new VertexImpl<Integer, String>(7, "")); // 0
+    cities.add(new VertexImpl<Integer, String>(5, "")); // 1
+    cities.add(new VertexImpl<Integer, String>(3, "")); // 2
+    cities.add(new VertexImpl<Integer, String>(11, "")); // 3
+    cities.add(new VertexImpl<Integer, String>(8, "")); // 4
+    cities.add(new VertexImpl<Integer, String>(2, "")); // 5
+    cities.add(new VertexImpl<Integer, String>(9, "")); // 6
+    cities.add(new VertexImpl<Integer, String>(10, "")); // 7
+
+    // 7 -> 11, 8
+    graph.addVertex(cities.get(0), new Edge<Integer, Integer>(cities.get(3)
+        .getVertexId(), null), new Edge<Integer, Integer>(cities.get(4)
+        .getVertexId(), null));
+    // 5 -> 11
+    graph.addVertex(cities.get(1), new Edge<Integer, Integer>(cities.get(3)
+        .getVertexId(), null));
+    // 3 -> 8,10
+    graph.addVertex(cities.get(2), new Edge<Integer, Integer>(cities.get(4)
+        .getVertexId(), null), new Edge<Integer, Integer>(cities.get(7)
+        .getVertexId(), null));
+    // 11 -> 2,9,10
+    graph.addVertex(cities.get(3), new Edge<Integer, Integer>(cities.get(2)
+        .getVertexId(), null), new Edge<Integer, Integer>(cities.get(6)
+        .getVertexId(), null), new Edge<Integer, Integer>(cities.get(7)
+        .getVertexId(), null));
+    // 8 -> 9
+    graph.addVertex(cities.get(4), new Edge<Integer, Integer>(cities.get(6)
+        .getVertexId(), null));
+    // 2 -> nowhere
+    graph.addVertex(cities.get(5));
+    // 9 -> nowhere
+    graph.addVertex(cities.get(6));
+    // 10 -> nowhere
+    graph.addVertex(cities.get(7));
+
+    return graph;
+  }
+
 }

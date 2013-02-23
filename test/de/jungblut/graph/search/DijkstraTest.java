@@ -18,8 +18,8 @@ public class DijkstraTest extends TestCase {
     Graph<Integer, String, Integer> g = TestGraphProvider
         .getWikipediaExampleGraph();
     Dijkstra<Integer, String> instance = Dijkstra.newInstance();
-    WeightedEdgeContainer<Integer> container = instance
-        .findShortestPaths(g, g.getVertex(0).getVertexId());
+    WeightedEdgeContainer<Integer> container = instance.findShortestPaths(g, g
+        .getVertex(0).getVertexId());
 
     int[] costs = new int[] { 0, 85, 217, 503, 173, 165, 403, 320, 415, 487 };
 
