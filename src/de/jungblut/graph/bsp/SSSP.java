@@ -5,6 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -34,7 +35,8 @@ public final class SSSP {
   public static class ShortestPathVertex extends
       Vertex<Text, IntWritable, TextIntPairWritable> {
 
-    public ShortestPathVertex() {
+    @Override
+    public void setup(Configuration conf) {
       this.setValue(new TextIntPairWritable(this.getVertexID(),
           new IntWritable(Integer.MAX_VALUE)));
     }

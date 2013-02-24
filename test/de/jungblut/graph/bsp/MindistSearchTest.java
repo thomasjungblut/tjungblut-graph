@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import de.jungblut.graph.Graph;
 import de.jungblut.graph.TestGraphProvider;
-import de.jungblut.graph.bsp.MindistSearch.MindistSearchCountReader;
+import de.jungblut.graph.bsp.MindistSearch.MindistSearchReader;
 import de.jungblut.graph.bsp.MindistSearch.MindistSearchVertex;
 import de.jungblut.graph.model.Vertex;
 
@@ -56,7 +56,7 @@ public final class MindistSearchTest extends TestCase {
     job.setInputKeyClass(LongWritable.class);
     job.setInputValueClass(Text.class);
     job.setInputFormat(TextInputFormat.class);
-    job.setVertexInputReaderClass(MindistSearchCountReader.class);
+    job.setVertexInputReaderClass(MindistSearchReader.class);
     job.setPartitioner(HashPartitioner.class);
     job.setOutputFormat(TextOutputFormat.class);
     job.setOutputKeyClass(Text.class);

@@ -99,7 +99,7 @@ public class MindistSearch {
 
   }
 
-  public static class MindistSearchCountReader extends
+  public static class MindistSearchReader extends
       VertexInputReader<LongWritable, Text, Text, NullWritable, Text> {
 
     /**
@@ -162,7 +162,7 @@ public class MindistSearch {
     job.setInputKeyClass(LongWritable.class);
     job.setInputValueClass(Text.class);
     job.setInputFormat(TextInputFormat.class);
-    job.setVertexInputReaderClass(MindistSearchCountReader.class);
+    job.setVertexInputReaderClass(MindistSearchReader.class);
     job.setPartitioner(HashPartitioner.class);
     job.setOutputFormat(TextOutputFormat.class);
     job.setOutputKeyClass(Text.class);
