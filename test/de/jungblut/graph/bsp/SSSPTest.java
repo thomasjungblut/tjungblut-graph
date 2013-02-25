@@ -24,6 +24,7 @@ import org.junit.Test;
 
 import de.jungblut.graph.Graph;
 import de.jungblut.graph.TestGraphProvider;
+import de.jungblut.graph.bsp.SSSP.IntIntPairWritable;
 import de.jungblut.graph.bsp.SSSP.SSSPTextReader;
 import de.jungblut.graph.bsp.SSSP.ShortestPathVertex;
 import de.jungblut.graph.model.Edge;
@@ -48,6 +49,7 @@ public final class SSSPTest extends TestCase {
       fs.delete(out, true);
     }
     conf.set(SSSP.START_VERTEX, "0");
+    ssspJob.setNumBspTask(2);
     ssspJob.setInputPath(in);
     ssspJob.setOutputPath(out);
 
@@ -59,13 +61,13 @@ public final class SSSPTest extends TestCase {
     ssspJob.setPartitioner(HashPartitioner.class);
     ssspJob.setOutputFormat(TextOutputFormat.class);
     ssspJob.setVertexInputReaderClass(SSSPTextReader.class);
-    ssspJob.setOutputKeyClass(Text.class);
-    ssspJob.setOutputValueClass(IntWritable.class);
+    ssspJob.setOutputKeyClass(IntWritable.class);
+    ssspJob.setOutputValueClass(IntIntPairWritable.class);
     // Iterate until all the nodes have been reached.
     ssspJob.setMaxIteration(Integer.MAX_VALUE);
 
-    ssspJob.setVertexIDClass(Text.class);
-    ssspJob.setVertexValueClass(IntWritable.class);
+    ssspJob.setVertexIDClass(IntWritable.class);
+    ssspJob.setVertexValueClass(IntIntPairWritable.class);
     ssspJob.setEdgeValueClass(IntWritable.class);
 
     long startTime = System.currentTimeMillis();
