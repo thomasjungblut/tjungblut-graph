@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -12,7 +13,6 @@ import junit.framework.TestCase;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
@@ -36,7 +36,7 @@ public final class MindistSearchTest extends TestCase {
 
     // Graph job configuration
     HamaConfiguration conf = new HamaConfiguration();
-    conf.set("bsp.local.tasks.maximum", "2");
+    conf.set("bsp.local.tasks.maximum", "1");
     GraphJob job = new GraphJob(conf, MindistSearch.class);
     FileSystem fs = FileSystem.get(conf);
     Path in = new Path("/tmp/mdst/input.txt");
@@ -48,10 +48,10 @@ public final class MindistSearchTest extends TestCase {
     job.setInputPath(in);
     job.setOutputPath(out);
 
-    job.setVertexClass(MindistSearchVertex.class);
     job.setVertexIDClass(Text.class);
     job.setVertexValueClass(Text.class);
     job.setEdgeValueClass(NullWritable.class);
+    job.setVertexClass(MindistSearchVertex.class);
 
     job.setInputKeyClass(LongWritable.class);
     job.setInputValueClass(Text.class);
@@ -62,16 +62,12 @@ public final class MindistSearchTest extends TestCase {
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(Text.class);
 
-    job.setVertexIDClass(Text.class);
-    job.setVertexValueClass(IntWritable.class);
-    job.setEdgeValueClass(IntWritable.class);
-
     long startTime = System.currentTimeMillis();
     if (job.waitForCompletion(true)) {
       System.out.println("Job Finished in "
           + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
-      verifyOutput(fs, out);
     }
+    verifyOutput(fs, out);
   }
 
   private void createInput(FileSystem fs, Path in) throws IOException {
@@ -79,18 +75,18 @@ public final class MindistSearchTest extends TestCase {
       fs.delete(in, true);
     }
 
-    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-        fs.create(in)));
+    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+        fs.create(in)))) {
 
-    Graph<Integer, String, Integer> wikipediaExampleGraph = TestGraphProvider
-        .getWikipediaExampleGraph();
-    for (Vertex<Integer, String> v : wikipediaExampleGraph.getVertexSet()) {
-      Set<Vertex<Integer, String>> adjacentVertices = wikipediaExampleGraph
-          .getAdjacentVertices(v);
-      writer.write(v.getVertexId() + "\t" + toString(adjacentVertices));
-      writer.write('\n');
+      Graph<Integer, String, Integer> wikipediaExampleGraph = TestGraphProvider
+          .getWikipediaExampleGraph();
+      for (Vertex<Integer, String> v : wikipediaExampleGraph.getVertexSet()) {
+        Set<Vertex<Integer, String>> adjacentVertices = wikipediaExampleGraph
+            .getAdjacentVertices(v);
+        writer.write(v.getVertexId() + "\t" + toString(adjacentVertices));
+        writer.write('\n');
+      }
     }
-    writer.close();
   }
 
   private String toString(Set<Vertex<Integer, String>> adjacentVertices) {
@@ -104,20 +100,23 @@ public final class MindistSearchTest extends TestCase {
 
   private void verifyOutput(FileSystem fs, Path out) throws IOException {
     int[] result = new int[10];
+    Arrays.fill(result, 1);
     FileStatus[] status = fs.listStatus(out);
     for (FileStatus fss : status) {
-      BufferedReader reader = new BufferedReader(new InputStreamReader(
-          fs.open(fss.getPath())));
+      try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+          fs.open(fss.getPath())))) {
 
-      String line;
-      while ((line = reader.readLine()) != null) {
-        System.out.println(line);
-        String[] split = line.split("\t");
-        result[Integer.parseInt(split[0])] = Integer.parseInt(split[1]);
+        String line;
+        while ((line = reader.readLine()) != null) {
+          System.out.println(line);
+          String[] split = line.split("\t");
+          result[Integer.parseInt(split[0])] = Integer.parseInt(split[1]);
+        }
       }
-      reader.close();
     }
 
+    // ensure everything is zero, as zero is the smallest vertex in the whole
+    // component
     for (int i = 0; i < result.length; i++) {
       assertEquals(0, result[i]);
     }
