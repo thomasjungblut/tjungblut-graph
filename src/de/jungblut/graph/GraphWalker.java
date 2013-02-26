@@ -29,8 +29,7 @@ public final class GraphWalker {
    */
   public static <VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> Iterator<Tuple<VERTEX_ID, Edge<VERTEX_ID, EDGE_VALUE>>> iterateEdges(
       Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> graph, Set<VERTEX_ID> vertices) {
-    return new EdgeIterator<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE>(graph,
-        vertices);
+    return new EdgeIterator<>(graph, vertices);
   }
 
   /**
@@ -43,8 +42,7 @@ public final class GraphWalker {
    */
   public static <VERTEX_ID, VERTEX_VALUE, EDGE_VALUE, T extends Vertex<VERTEX_ID, VERTEX_VALUE>> Iterator<T> depthFirst(
       Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> g, VERTEX_ID start) {
-    return new VertexIterator<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE, T>(true, g,
-        start);
+    return new VertexIterator<>(true, g, start);
   }
 
   /**
@@ -57,8 +55,7 @@ public final class GraphWalker {
    */
   public static <VERTEX_ID, VERTEX_VALUE, EDGE_VALUE, T extends Vertex<VERTEX_ID, VERTEX_VALUE>> Iterator<T> breadthFirst(
       Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> g, VERTEX_ID start) {
-    return new VertexIterator<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE, T>(false, g,
-        start);
+    return new VertexIterator<>(false, g, start);
   }
 
   /**

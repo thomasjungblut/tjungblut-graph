@@ -56,7 +56,7 @@ public final class AStar<VERTEX_ID, VERTEX_VALUE> {
     while (!openSet.isEmpty()) {
       VERTEX_ID v = findLowest(openSet, f_score);
       if (v.equals(goal)) {
-        return new WeightedEdgeContainer<VERTEX_ID>(g_score, cameFrom);
+        return new WeightedEdgeContainer<>(g_score, cameFrom);
       } else {
         openSet.remove(v);
         closedSet.add(v);
@@ -153,7 +153,7 @@ public final class AStar<VERTEX_ID, VERTEX_VALUE> {
   }
 
   public static final <VERTEX_ID, VERTEX_VALUE> AStar<VERTEX_ID, VERTEX_VALUE> newInstance() {
-    return new AStar<VERTEX_ID, VERTEX_VALUE>();
+    return new AStar<>();
   }
 
 }

@@ -64,11 +64,10 @@ public final class Dijkstra<VERTEX_ID, VERTEX_VALUE> {
     if (distance != null) {
       for (Vertex<VERTEX_ID, VERTEX_VALUE> v : g.getVertexSet()) {
         if (!v.getVertexId().equals(start)) {
-          distance.add(new IdCostTuple<VERTEX_ID>(v.getVertexId(),
-              Integer.MAX_VALUE));
+          distance.add(new IdCostTuple<>(v.getVertexId(), Integer.MAX_VALUE));
         }
       }
-      distance.add(new IdCostTuple<VERTEX_ID>(start, 0));
+      distance.add(new IdCostTuple<>(start, 0));
     }
     if (vertices != null) {
       vertices.addAll(g.getVertexIDSet());
@@ -107,14 +106,14 @@ public final class Dijkstra<VERTEX_ID, VERTEX_VALUE> {
         }
       }
       // add it again to the heap to be priotized correctly
-      distance.add(new IdCostTuple<VERTEX_ID>(v.getVertexId(), summedLength));
+      distance.add(new IdCostTuple<>(v.getVertexId(), summedLength));
       ancestors.put(v.getVertexId(), u.getVertexId());
     }
 
   }
 
   public static final <VERTEX_ID, VERTEX_VALUE> Dijkstra<VERTEX_ID, VERTEX_VALUE> newInstance() {
-    return new Dijkstra<VERTEX_ID, VERTEX_VALUE>();
+    return new Dijkstra<>();
   }
 
 }

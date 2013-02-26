@@ -92,14 +92,12 @@ public final class CostVertexLineReader implements
     int id = Integer.parseInt(split[0]);
     int dest = Integer.parseInt(split[1]);
     int cost = Integer.parseInt(split[2]);
-    VertexImpl<Integer, Integer> vertex = new VertexImpl<Integer, Integer>(id,
-        null);
-    graph.addVertex(vertex, new Edge<Integer, Integer>(dest, cost));
+    VertexImpl<Integer, Integer> vertex = new VertexImpl<>(id, null);
+    graph.addVertex(vertex, new Edge<>(dest, cost));
     // take care that the destination is there
     graph.addVertex(new VertexImpl<Integer, Integer>(dest, null));
     if (undirected) {
-      graph.addEdge(dest,
-          new Edge<Integer, Integer>(vertex.getVertexId(), cost));
+      graph.addEdge(dest, new Edge<>(vertex.getVertexId(), cost));
     }
   }
 }

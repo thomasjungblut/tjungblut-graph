@@ -73,7 +73,7 @@ public final class BellmanFord<VERTEX_ID, VERTEX_VALUE> {
         return null;
       }
     }
-    return new WeightedEdgeContainer<VERTEX_ID>(pathDistance, ancestors);
+    return new WeightedEdgeContainer<>(pathDistance, ancestors);
   }
 
   /**
@@ -90,6 +90,6 @@ public final class BellmanFord<VERTEX_ID, VERTEX_VALUE> {
   }
 
   public static final <VERTEX_ID, VERTEX_VALUE> BellmanFord<VERTEX_ID, VERTEX_VALUE> newInstance() {
-    return new BellmanFord<VERTEX_ID, VERTEX_VALUE>();
+    return new BellmanFord<>();
   }
 }

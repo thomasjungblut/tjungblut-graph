@@ -112,8 +112,7 @@ public final class DenseGraph<VERTEX_VALUE> implements
       // if we're still in bounds and the value isn't null
       if (!(x < 0 || x >= this.height || y < 0 || y >= this.width)
           && graph[x][y] != null) {
-        set.add(new VertexImpl<Point, VERTEX_VALUE>(new Point(x, y),
-            graph[x][y]));
+        set.add(new VertexImpl<>(new Point(x, y), graph[x][y]));
       }
       x = vertexId.x;
       y = vertexId.y;
@@ -124,8 +123,7 @@ public final class DenseGraph<VERTEX_VALUE> implements
 
   @Override
   public Vertex<Point, VERTEX_VALUE> getVertex(Point vertexId) {
-    return new VertexImpl<Point, VERTEX_VALUE>(vertexId,
-        graph[vertexId.x][vertexId.y]);
+    return new VertexImpl<>(vertexId, graph[vertexId.x][vertexId.y]);
   }
 
   @Override
@@ -133,7 +131,7 @@ public final class DenseGraph<VERTEX_VALUE> implements
     Set<Vertex<Point, VERTEX_VALUE>> set = Sets.newHashSet();
     Set<Point> vertexIDSet = getVertexIDSet();
     for (Point p : vertexIDSet) {
-      set.add(new VertexImpl<Point, VERTEX_VALUE>(p, graph[p.x][p.y]));
+      set.add(new VertexImpl<>(p, graph[p.x][p.y]));
     }
     return set;
   }
@@ -164,7 +162,7 @@ public final class DenseGraph<VERTEX_VALUE> implements
     Set<Edge<Point, Integer>> set = Sets.newHashSet();
     Set<Vertex<Point, VERTEX_VALUE>> adjacentVertices = getAdjacentVertices(vertexId);
     for (Vertex<Point, VERTEX_VALUE> v : adjacentVertices) {
-      set.add(new Edge<Point, Integer>(v.getVertexId(), 1));
+      set.add(new Edge<>(v.getVertexId(), 1));
     }
     return set;
   }
@@ -176,7 +174,7 @@ public final class DenseGraph<VERTEX_VALUE> implements
 
   @Override
   public Edge<Point, Integer> getEdge(Point source, Point dest) {
-    return new Edge<Point, Integer>(dest, 1);
+    return new Edge<>(dest, 1);
   }
 
 }

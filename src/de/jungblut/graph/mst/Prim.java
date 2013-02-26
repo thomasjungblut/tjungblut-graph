@@ -53,10 +53,8 @@ public final class Prim<VERTEX_ID, VERTEX_VALUE> {
       if (mst.getVertex(minEdge.getSource()) != null
           && mst.getVertex(minEdge.getVertexId()) == null) {
         mst.addVertex(graph.getVertex(minEdge.getVertexId()));
-        mst.addEdge(
-            minEdge.getSource(),
-            new Edge<VERTEX_ID, Integer>(minEdge.getVertexId(), minEdge
-                .getDistance()));
+        mst.addEdge(minEdge.getSource(), new Edge<>(minEdge.getVertexId(),
+            minEdge.getDistance()));
 
         // add the edges of the destination to the priority queue
         edges = graph.getEdges(minEdge.getVertexId());
@@ -73,7 +71,7 @@ public final class Prim<VERTEX_ID, VERTEX_VALUE> {
   }
 
   public static final <VERTEX_ID, VERTEX_VALUE> Prim<VERTEX_ID, VERTEX_VALUE> getInstance() {
-    return new Prim<VERTEX_ID, VERTEX_VALUE>();
+    return new Prim<>();
   }
 
 }

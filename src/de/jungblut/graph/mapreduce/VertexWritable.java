@@ -50,7 +50,7 @@ public final class VertexWritable implements Writable, Cloneable {
 
   public void addVertex(LongWritable id) {
     if (edges == null)
-      edges = new TreeSet<LongWritable>();
+      edges = new TreeSet<>();
     edges.add(id);
   }
 
@@ -74,7 +74,7 @@ public final class VertexWritable implements Writable, Cloneable {
     vertexId.readFields(in);
     int length = in.readInt();
     if (length > -1) {
-      edges = new TreeSet<LongWritable>();
+      edges = new TreeSet<>();
       for (int i = 0; i < length; i++) {
         LongWritable temp = new LongWritable();
         temp.readFields(in);
@@ -97,7 +97,7 @@ public final class VertexWritable implements Writable, Cloneable {
     VertexWritable toReturn = new VertexWritable(new LongWritable(
         vertexId.get()));
     if (edges != null) {
-      toReturn.edges = new TreeSet<LongWritable>();
+      toReturn.edges = new TreeSet<>();
       for (LongWritable l : edges) {
         toReturn.edges.add(new LongWritable(l.get()));
       }

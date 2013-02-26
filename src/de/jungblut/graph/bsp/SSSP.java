@@ -91,9 +91,9 @@ public final class SSSP {
           vertex.setVertexID(new IntWritable(Integer.parseInt(split[i])));
         } else {
           String[] split2 = split[i].split(":");
-          vertex.addEdge(new Edge<IntWritable, IntWritable>(new IntWritable(
-              Integer.parseInt(split2[0])), new IntWritable(Integer
-              .parseInt(split2[1]))));
+          vertex.addEdge(new Edge<>(
+              new IntWritable(Integer.parseInt(split2[0])), new IntWritable(
+                  Integer.parseInt(split2[1]))));
         }
       }
       return true;
