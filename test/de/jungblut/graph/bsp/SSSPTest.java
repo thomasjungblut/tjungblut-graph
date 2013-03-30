@@ -83,6 +83,7 @@ public final class SSSPTest extends TestCase {
       fs.delete(in, true);
     }
 
+    @SuppressWarnings("resource")
     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
         fs.create(in)));
 
@@ -115,6 +116,7 @@ public final class SSSPTest extends TestCase {
     int[] ancestors = new int[] { 0, 0, 0, 7, 0, 1, 2, 2, 5, 7 };
     FileStatus[] status = fs.listStatus(out);
     for (FileStatus fss : status) {
+      @SuppressWarnings("resource")
       BufferedReader reader = new BufferedReader(new InputStreamReader(
           fs.open(fss.getPath())));
 

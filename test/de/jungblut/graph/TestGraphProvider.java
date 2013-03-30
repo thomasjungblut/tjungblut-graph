@@ -10,22 +10,22 @@ public class TestGraphProvider {
   /**
    * from {@link http://de.wikipedia.org/wiki/Dijkstra-Algorithmus#Beispiel}
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "unused" })
   public static Graph<Integer, String, Integer> getWikipediaExampleGraph() {
     Graph<Integer, String, Integer> graph = new AdjacencyList<>();
 
     ArrayList<VertexImpl<Integer, String>> cities = new ArrayList<>();
 
-    cities.add(new VertexImpl<Integer, String>(0, "Frankfurt"));
-    cities.add(new VertexImpl<Integer, String>(1, "Mannheim"));
-    cities.add(new VertexImpl<Integer, String>(2, "Wuerzburg"));
-    cities.add(new VertexImpl<Integer, String>(3, "Stuttgart"));
-    cities.add(new VertexImpl<Integer, String>(4, "Kassel"));
-    cities.add(new VertexImpl<Integer, String>(5, "Karlsruhe"));
-    cities.add(new VertexImpl<Integer, String>(6, "Erfurt"));
-    cities.add(new VertexImpl<Integer, String>(7, "Nuernberg"));
-    cities.add(new VertexImpl<Integer, String>(8, "Augsburg"));
-    cities.add(new VertexImpl<Integer, String>(9, "Muenchen"));
+    cities.add(new VertexImpl<>(0, "Frankfurt"));
+    cities.add(new VertexImpl<>(1, "Mannheim"));
+    cities.add(new VertexImpl<>(2, "Wuerzburg"));
+    cities.add(new VertexImpl<>(3, "Stuttgart"));
+    cities.add(new VertexImpl<>(4, "Kassel"));
+    cities.add(new VertexImpl<>(5, "Karlsruhe"));
+    cities.add(new VertexImpl<>(6, "Erfurt"));
+    cities.add(new VertexImpl<>(7, "Nuernberg"));
+    cities.add(new VertexImpl<>(8, "Augsburg"));
+    cities.add(new VertexImpl<>(9, "Muenchen"));
 
     // frankfurt -> mannheim, kassel, wuerzburg
     graph.addVertex(cities.get(0), new Edge<Integer, Integer>(cities.get(1)
@@ -91,14 +91,14 @@ public class TestGraphProvider {
     ArrayList<VertexImpl<Integer, String>> cities = new ArrayList<>();
 
     // 7, 5, 3, 11, 8, 2, 9, 10
-    cities.add(new VertexImpl<Integer, String>(7, "")); // 0
-    cities.add(new VertexImpl<Integer, String>(5, "")); // 1
-    cities.add(new VertexImpl<Integer, String>(3, "")); // 2
-    cities.add(new VertexImpl<Integer, String>(11, "")); // 3
-    cities.add(new VertexImpl<Integer, String>(8, "")); // 4
-    cities.add(new VertexImpl<Integer, String>(2, "")); // 5
-    cities.add(new VertexImpl<Integer, String>(9, "")); // 6
-    cities.add(new VertexImpl<Integer, String>(10, "")); // 7
+    cities.add(new VertexImpl<>(7, "")); // 0
+    cities.add(new VertexImpl<>(5, "")); // 1
+    cities.add(new VertexImpl<>(3, "")); // 2
+    cities.add(new VertexImpl<>(11, "")); // 3
+    cities.add(new VertexImpl<>(8, "")); // 4
+    cities.add(new VertexImpl<>(2, "")); // 5
+    cities.add(new VertexImpl<>(9, "")); // 6
+    cities.add(new VertexImpl<>(10, "")); // 7
 
     // 7 -> 11, 8
     graph.addVertex(cities.get(0), new Edge<Integer, Integer>(cities.get(3)

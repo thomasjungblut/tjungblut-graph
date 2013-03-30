@@ -23,7 +23,7 @@ public class DenseGraphTest extends TestCase {
       for (int j = 0; j < 10; j++) {
         // omit 0.4% of our dense grid to mimic "walls"
         if (r.nextDouble() > 0.6) {
-          g.addVertex(new VertexImpl<Point, Integer>(new Point(i, j), 1));
+          g.addVertex(new VertexImpl<>(new Point(i, j), 1));
           testRepresentation[i][j] = 1;
         }
       }
