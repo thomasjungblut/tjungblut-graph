@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/thomasjungblut/tjungblut-graph.png)](https://travis-ci.org/thomasjungblut/tjungblut-graph.png)
-
 This is my own Graph package. 
 The most of the stuff in here was from my [GSoC2012 repository here](https://code.google.com/p/hama-shortest-paths/). 
 I wanted to get out all the batch related things that I featured on my blog, like mindist search and pagerank. 
