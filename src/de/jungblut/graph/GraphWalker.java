@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 
 import com.google.common.collect.AbstractIterator;
@@ -69,7 +70,7 @@ public final class GraphWalker {
     private final boolean depthFirst;
     private final Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> g;
 
-    private final Deque<VERTEX_ID> vertexDeque = new ArrayDeque<>();
+    private final Deque<VERTEX_ID> vertexDeque = new LinkedList<>();
     private final HashSet<VERTEX_ID> visitedVertices = new HashSet<>();
 
     public VertexIterator(boolean depthFirst,
