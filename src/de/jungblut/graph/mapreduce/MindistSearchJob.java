@@ -15,8 +15,17 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
 public class MindistSearchJob {
 
+  private static final String FILES_IN = "files/min-search/import/";
+  private static final String FILES_OUT = "files/min-search/depth_";
+
   public static void main(String[] args) throws IOException,
       InterruptedException, ClassNotFoundException {
+
+    String inPath = null;
+    if (args.length > 0) {
+      inPath = args[0];
+    }
+
     int depth = 1;
     Configuration conf = new Configuration();
     conf.set("recursion.depth", depth + "");
@@ -27,13 +36,14 @@ public class MindistSearchJob {
     job.setReducerClass(MindistSearchReducer.class);
     job.setJarByClass(TextGraphMapper.class);
 
-    Path in = new Path("files/min-search/import/");
-    Path out = new Path("files/min-search/depth_1");
+    Path in = new Path(inPath == null ? FILES_IN : inPath);
+    Path out = new Path(FILES_OUT + 1);
 
     FileInputFormat.addInputPath(job, in);
     FileSystem fs = FileSystem.get(conf);
-    if (fs.exists(out))
+    if (fs.exists(out)) {
       fs.delete(out, true);
+    }
 
     FileOutputFormat.setOutputPath(job, out);
     job.setInputFormatClass(TextInputFormat.class);
@@ -56,12 +66,13 @@ public class MindistSearchJob {
       job.setReducerClass(MindistSearchReducer.class);
       job.setJarByClass(MindistSearchMapper.class);
 
-      in = new Path("files/min-search/depth_" + (depth - 1) + "/");
-      out = new Path("files/min-search/depth_" + depth);
+      in = new Path(FILES_OUT + (depth - 1) + "/");
+      out = new Path(FILES_OUT + depth);
 
       FileInputFormat.addInputPath(job, in);
-      if (fs.exists(out))
+      if (fs.exists(out)) {
         fs.delete(out, true);
+      }
 
       FileOutputFormat.setOutputPath(job, out);
       job.setInputFormatClass(SequenceFileInputFormat.class);
@@ -74,7 +85,11 @@ public class MindistSearchJob {
       counter = job.getCounters()
           .findCounter(MindistSearchReducer.UpdateCounter.UPDATED).getValue();
     }
+    out = new Path(FILES_OUT + "final");
+    if (fs.exists(out)) {
+      fs.delete(out, true);
+    }
+    fs.rename(new Path(FILES_OUT + (depth - 1)), out);
 
   }
-
 }
