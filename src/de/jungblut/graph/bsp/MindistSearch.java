@@ -97,7 +97,7 @@ public class MindistSearch {
 
   }
 
-  public static class MindistSearchReader extends
+  public static class TabToTextVertexReader extends
       VertexInputReader<LongWritable, Text, Text, NullWritable, Text> {
 
     /**
@@ -160,7 +160,7 @@ public class MindistSearch {
     job.setInputKeyClass(LongWritable.class);
     job.setInputValueClass(Text.class);
     job.setInputFormat(TextInputFormat.class);
-    job.setVertexInputReaderClass(MindistSearchReader.class);
+    job.setVertexInputReaderClass(TabToTextVertexReader.class);
     job.setPartitioner(HashPartitioner.class);
     job.setOutputFormat(TextOutputFormat.class);
     job.setOutputKeyClass(Text.class);

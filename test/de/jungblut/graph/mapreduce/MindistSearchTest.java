@@ -2,16 +2,15 @@ package de.jungblut.graph.mapreduce;
 
 import java.util.HashMap;
 
-import junit.framework.TestCase;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
+import org.junit.Assert;
 import org.junit.Test;
 
-public class MindistSearchTest extends TestCase {
+public class MindistSearchTest {
 
   @Test
   public void testMindistSearch() throws Exception {
@@ -29,11 +28,11 @@ public class MindistSearchTest extends TestCase {
         result.put(key.get(), val.getVertexId().get());
       }
     }
-    assertEquals(4, result.size());
-    assertEquals(1l, result.get(1l).longValue());
-    assertEquals(1l, result.get(4l).longValue());
-    assertEquals(1l, result.get(5l).longValue());
-    assertEquals(1l, result.get(7l).longValue());
+    Assert.assertEquals(4, result.size());
+    Assert.assertEquals(1l, result.get(1l).longValue());
+    Assert.assertEquals(1l, result.get(4l).longValue());
+    Assert.assertEquals(1l, result.get(5l).longValue());
+    Assert.assertEquals(1l, result.get(7l).longValue());
 
   }
 

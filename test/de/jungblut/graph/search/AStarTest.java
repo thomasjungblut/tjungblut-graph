@@ -3,14 +3,13 @@ package de.jungblut.graph.search;
 import java.util.List;
 import java.util.Map.Entry;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.jungblut.graph.Graph;
 import de.jungblut.graph.TestGraphProvider;
 
-public class AStarTest extends TestCase {
+public class AStarTest {
 
   @Test
   public void testAStarSearch() throws Exception {
@@ -22,7 +21,7 @@ public class AStarTest extends TestCase {
 
     int[] costs = new int[] { 0, 85, 217, 503, 173, 165, 403, 320, 415, 487 };
     for (Entry<Integer, Integer> entry : container.getPathCosts().entrySet()) {
-      assertEquals(costs[entry.getKey()], entry.getValue().intValue());
+      Assert.assertEquals(costs[entry.getKey()], entry.getValue().intValue());
     }
 
     int[] pathIds = new int[] { 7, 2, 0 };
@@ -30,7 +29,7 @@ public class AStarTest extends TestCase {
     List<Integer> path = container
         .reconstructPath(g.getVertex(9).getVertexId());
     for (Integer entry : path) {
-      assertEquals(pathIds[index++], entry.intValue());
+      Assert.assertEquals(pathIds[index++], entry.intValue());
     }
   }
 

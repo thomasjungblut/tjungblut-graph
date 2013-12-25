@@ -2,8 +2,7 @@ package de.jungblut.graph.reader;
 
 import java.io.IOException;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.base.Optional;
@@ -11,7 +10,7 @@ import com.google.common.base.Optional;
 import de.jungblut.graph.Graph;
 import de.jungblut.graph.model.Vertex;
 
-public class CostVertexLineReaderTest extends TestCase {
+public class CostVertexLineReaderTest {
 
   @Test
   public void testReader() throws IOException {
@@ -21,11 +20,11 @@ public class CostVertexLineReaderTest extends TestCase {
     Graph<Integer, Integer, Integer> graph = reader.readGraph(absent);
 
     Vertex<Integer, Integer> vertex = graph.getVertex(1);
-    assertNotNull(vertex);
+    Assert.assertNotNull(vertex);
 
-    assertEquals(500, graph.getNumVertices());
+    Assert.assertEquals(500, graph.getNumVertices());
 
-    assertEquals(2184 * 2, graph.getNumEdges());
+    Assert.assertEquals(2184 * 2, graph.getNumEdges());
 
   }
 }

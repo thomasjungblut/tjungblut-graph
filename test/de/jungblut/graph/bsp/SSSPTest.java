@@ -7,8 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -20,6 +18,7 @@ import org.apache.hama.bsp.HashPartitioner;
 import org.apache.hama.bsp.TextInputFormat;
 import org.apache.hama.bsp.TextOutputFormat;
 import org.apache.hama.graph.GraphJob;
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.jungblut.graph.Graph;
@@ -30,7 +29,7 @@ import de.jungblut.graph.bsp.SSSP.ShortestPathVertex;
 import de.jungblut.graph.model.Edge;
 import de.jungblut.graph.model.Vertex;
 
-public final class SSSPTest extends TestCase {
+public final class SSSPTest {
 
   @Test
   public void testSSSP() throws Exception {
@@ -131,8 +130,8 @@ public final class SSSPTest extends TestCase {
     }
 
     for (int i = 0; i < ancestorResult.length; i++) {
-      assertEquals(costs[i], costResult[i]);
-      assertEquals(ancestors[i], ancestorResult[i]);
+      Assert.assertEquals(costs[i], costResult[i]);
+      Assert.assertEquals(ancestors[i], ancestorResult[i]);
     }
 
   }

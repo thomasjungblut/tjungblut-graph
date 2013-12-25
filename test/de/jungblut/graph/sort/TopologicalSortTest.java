@@ -2,15 +2,14 @@ package de.jungblut.graph.sort;
 
 import java.util.List;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.jungblut.graph.Graph;
 import de.jungblut.graph.TestGraphProvider;
 import de.jungblut.graph.model.Vertex;
 
-public class TopologicalSortTest extends TestCase {
+public class TopologicalSortTest {
 
   @Test
   public void testTopologicalSort() {
@@ -22,7 +21,7 @@ public class TopologicalSortTest extends TestCase {
     int index = 0;
     for (Vertex<Integer, String> v : sort) {
       System.out.println(v.getVertexId());
-      assertEquals(result[index], v.getVertexId().intValue());
+      Assert.assertEquals(result[index], v.getVertexId().intValue());
       index++;
     }
 

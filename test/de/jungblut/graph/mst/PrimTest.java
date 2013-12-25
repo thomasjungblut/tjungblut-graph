@@ -2,8 +2,7 @@ package de.jungblut.graph.mst;
 
 import java.util.Set;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.jungblut.graph.Graph;
@@ -11,7 +10,7 @@ import de.jungblut.graph.TestGraphProvider;
 import de.jungblut.graph.model.Edge;
 import de.jungblut.graph.model.Vertex;
 
-public class PrimTest extends TestCase {
+public class PrimTest {
 
   @Test
   public void testCalculateMST() {
@@ -24,9 +23,9 @@ public class PrimTest extends TestCase {
 
     Set<Vertex<Integer, String>> vertexSet = mst.getVertexSet();
     // all vertices must be contained
-    assertEquals(g.getNumVertices(), vertexSet.size());
+    Assert.assertEquals(g.getNumVertices(), vertexSet.size());
     // in the wikipedia graph we can only have 9 edges to calculate the MST
-    assertEquals(9, mst.getNumEdges());
+    Assert.assertEquals(9, mst.getNumEdges());
 
     // sum the edge weights to get the cost cost
     int cost = 0;
@@ -37,7 +36,7 @@ public class PrimTest extends TestCase {
       }
     }
 
-    assertEquals(1278, cost);
+    Assert.assertEquals(1278, cost);
 
   }
 }

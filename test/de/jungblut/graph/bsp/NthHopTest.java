@@ -5,8 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.Set;
 
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -22,40 +20,43 @@ import org.apache.hama.graph.GraphJob;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.jungblut.graph.Graph;
-import de.jungblut.graph.TestGraphProvider;
-import de.jungblut.graph.bsp.MindistSearch.MindistSearchVertex;
-import de.jungblut.graph.bsp.MindistSearch.TabToTextVertexReader;
-import de.jungblut.graph.model.Vertex;
+import com.google.common.collect.TreeMultimap;
 
-public final class MindistSearchTest {
+import de.jungblut.graph.bsp.MindistSearch.TabToTextVertexReader;
+import de.jungblut.graph.bsp.NthHop.EmptyVertexOutputWriter;
+import de.jungblut.graph.bsp.NthHop.HopMessage;
+import de.jungblut.graph.bsp.NthHop.NthHopVertex;
+
+public final class NthHopTest {
 
   @Test
-  public void testSSSP() throws Exception {
+  public void testThreeHops() throws Exception {
 
     // Graph job configuration
     HamaConfiguration conf = new HamaConfiguration();
     conf.set("bsp.local.tasks.maximum", "1");
-    GraphJob job = new GraphJob(conf, MindistSearch.class);
+    conf.set(NthHop.MAX_HOPS_KEY, "3");
+    GraphJob job = new GraphJob(conf, NthHop.class);
     FileSystem fs = FileSystem.get(conf);
-    Path in = new Path("/tmp/mdst/input.txt");
+    Path in = new Path("/tmp/nthhop/input.txt");
     createInput(fs, in);
-    Path out = new Path("/tmp/mdst/out/");
+    Path out = new Path("/tmp/nthhop/out/");
     if (fs.exists(out)) {
       fs.delete(out, true);
     }
     job.setInputPath(in);
     job.setOutputPath(out);
-
+    job.setMaxIteration(3);
+    job.setVertexClass(NthHopVertex.class);
     job.setVertexIDClass(Text.class);
-    job.setVertexValueClass(Text.class);
+    job.setVertexValueClass(HopMessage.class);
     job.setEdgeValueClass(NullWritable.class);
-    job.setVertexClass(MindistSearchVertex.class);
 
     job.setInputKeyClass(LongWritable.class);
     job.setInputValueClass(Text.class);
     job.setInputFormat(TextInputFormat.class);
     job.setVertexInputReaderClass(TabToTextVertexReader.class);
+    job.setVertexOutputWriterClass(EmptyVertexOutputWriter.class);
     job.setPartitioner(HashPartitioner.class);
     job.setOutputFormat(TextOutputFormat.class);
     job.setOutputKeyClass(Text.class);
@@ -76,30 +77,17 @@ public final class MindistSearchTest {
 
     try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
         fs.create(in)))) {
-
-      Graph<Integer, String, Integer> wikipediaExampleGraph = TestGraphProvider
-          .getWikipediaExampleGraph();
-      for (Vertex<Integer, String> v : wikipediaExampleGraph.getVertexSet()) {
-        Set<Vertex<Integer, String>> adjacentVertices = wikipediaExampleGraph
-            .getAdjacentVertices(v);
-        writer.write(v.getVertexId() + "\t" + toString(adjacentVertices));
-        writer.write('\n');
-      }
+      writer.write("1\t2\t3\n");
+      writer.write("2\t4\n");
+      writer.write("3\t4\t5\n");
+      writer.write("4\t1\t5\t6\n");
+      writer.write("5\t6\n");
+      writer.write("6\n");
     }
-  }
-
-  private String toString(Set<Vertex<Integer, String>> adjacentVertices) {
-    StringBuilder sb = new StringBuilder();
-    for (Vertex<Integer, String> v : adjacentVertices) {
-      sb.append(v.getVertexId());
-      sb.append('\t');
-    }
-    return sb.toString();
   }
 
   private void verifyOutput(FileSystem fs, Path out) throws IOException {
-    int[] result = new int[10];
-    Arrays.fill(result, 1);
+    TreeMultimap<String, String> multiMap = TreeMultimap.create();
     FileStatus[] status = fs.listStatus(out);
     for (FileStatus fss : status) {
       try (BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -107,18 +95,18 @@ public final class MindistSearchTest {
 
         String line;
         while ((line = reader.readLine()) != null) {
-          System.out.println(line);
           String[] split = line.split("\t");
-          result[Integer.parseInt(split[0])] = Integer.parseInt(split[1]);
+          multiMap.put(split[0], split[1]);
         }
       }
     }
-
-    // ensure everything is zero, as zero is the smallest vertex in the whole
-    // component
-    for (int i = 0; i < result.length; i++) {
-      Assert.assertEquals(0, result[i]);
-    }
+    System.out.println(multiMap);
+    // LORD forgive me this toString usage!
+    Assert.assertEquals(4, multiMap.keySet().size());
+    Assert.assertEquals("[1, 5, 6]", multiMap.get("1").toString());
+    Assert.assertEquals("[2, 3, 6]", multiMap.get("2").toString());
+    Assert.assertEquals("[2, 3, 6]", multiMap.get("3").toString());
+    Assert.assertEquals("[4, 5]", multiMap.get("4").toString());
 
   }
 }

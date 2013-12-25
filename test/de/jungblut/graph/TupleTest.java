@@ -1,16 +1,15 @@
 package de.jungblut.graph;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
 import org.junit.Test;
 
-public class TupleTest extends TestCase {
+public class TupleTest {
 
   @Test
   public void testTuple() {
     Tuple<Integer, String> tp = new Tuple<>(1, "abc");
 
-    assertEquals(1, tp.getFirst().intValue());
-    assertEquals("abc", tp.getSecond());
+    Assert.assertEquals(1, tp.getFirst().intValue());
+    Assert.assertEquals("abc", tp.getSecond());
   }
 }

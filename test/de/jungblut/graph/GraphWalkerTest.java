@@ -2,14 +2,13 @@ package de.jungblut.graph;
 
 import java.util.Iterator;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.jungblut.graph.model.Edge;
 import de.jungblut.graph.model.VertexImpl;
 
-public class GraphWalkerTest extends TestCase {
+public class GraphWalkerTest {
 
   @Test
   public void testBreadthFirstTraversal() throws Exception {
@@ -24,7 +23,7 @@ public class GraphWalkerTest extends TestCase {
     int index = 0;
     while (it.hasNext()) {
       VertexImpl<Integer, String> next = it.next();
-      assertEquals(iterationIds[index++], next.getVertexId().intValue());
+      Assert.assertEquals(iterationIds[index++], next.getVertexId().intValue());
     }
   }
 
@@ -41,7 +40,7 @@ public class GraphWalkerTest extends TestCase {
     int index = 0;
     while (it.hasNext()) {
       VertexImpl<Integer, String> next = it.next();
-      assertEquals(iterationIds[index++], next.getVertexId().intValue());
+      Assert.assertEquals(iterationIds[index++], next.getVertexId().intValue());
     }
   }
 
@@ -59,7 +58,7 @@ public class GraphWalkerTest extends TestCase {
     int index = 0;
     while (it.hasNext()) {
       Tuple<Integer, Edge<Integer, Integer>> next = it.next();
-      assertEquals(iterationIds[index++], next.getSecond()
+      Assert.assertEquals(iterationIds[index++], next.getSecond()
           .getDestinationVertexID().intValue());
     }
   }

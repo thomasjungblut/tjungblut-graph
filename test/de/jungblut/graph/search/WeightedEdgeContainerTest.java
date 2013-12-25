@@ -3,13 +3,12 @@ package de.jungblut.graph.search;
 import java.util.HashMap;
 import java.util.List;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.Maps;
 
-public class WeightedEdgeContainerTest extends TestCase {
+public class WeightedEdgeContainerTest {
 
   @Test
   public void testReconstruction() {
@@ -22,10 +21,10 @@ public class WeightedEdgeContainerTest extends TestCase {
     WeightedEdgeContainer<String> container = new WeightedEdgeContainer<>(
         costs, ancestors);
     List<String> path = container.reconstructPath("end0");
-    assertEquals(3, path.size());
+    Assert.assertEquals(3, path.size());
     // note that the end vertex is not in the path here
     for (int i = 1; i < 4; i++) {
-      assertEquals("end" + i, path.get(i - 1));
+      Assert.assertEquals("end" + i, path.get(i - 1));
     }
   }
 

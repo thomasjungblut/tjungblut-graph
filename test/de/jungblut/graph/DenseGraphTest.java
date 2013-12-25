@@ -3,14 +3,13 @@ package de.jungblut.graph;
 import java.awt.Point;
 import java.util.Random;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.jungblut.graph.model.Vertex;
 import de.jungblut.graph.model.VertexImpl;
 
-public class DenseGraphTest extends TestCase {
+public class DenseGraphTest {
 
   @Test
   public void testGraphRepresentation() {
@@ -33,16 +32,16 @@ public class DenseGraphTest extends TestCase {
       for (int j = 0; j < 10; j++) {
         Vertex<Point, Integer> vertex = g.getVertex(new Point(i, j));
         if (testRepresentation[i][j] == 1) {
-          assertNotNull(vertex);
-          assertNotNull(vertex.getVertexId());
-          assertNotNull(vertex.getVertexValue());
-          assertEquals(1, vertex.getVertexValue().intValue());
-          assertEquals(i, vertex.getVertexId().x);
-          assertEquals(j, vertex.getVertexId().y);
+          Assert.assertNotNull(vertex);
+          Assert.assertNotNull(vertex.getVertexId());
+          Assert.assertNotNull(vertex.getVertexValue());
+          Assert.assertEquals(1, vertex.getVertexValue().intValue());
+          Assert.assertEquals(i, vertex.getVertexId().x);
+          Assert.assertEquals(j, vertex.getVertexId().y);
         } else {
-          assertNotNull(vertex);
-          assertNotNull(vertex.getVertexId());
-          assertNull(vertex.getVertexValue());
+          Assert.assertNotNull(vertex);
+          Assert.assertNotNull(vertex.getVertexId());
+          Assert.assertNull(vertex.getVertexValue());
         }
       }
     }
