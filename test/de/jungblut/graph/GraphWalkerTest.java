@@ -19,7 +19,7 @@ public class GraphWalkerTest {
         .getVertex(0).getVertexId());
     // this actually might have order involved, which is not guranteed by the
     // walker
-    int[] iterationIds = new int[] { 0, 4, 1, 2, 9, 5, 7, 6, 8, 3 };
+    int[] iterationIds = new int[] { 0, 1, 2, 4, 5, 6, 7, 9, 8, 3 };
     int index = 0;
     while (it.hasNext()) {
       VertexImpl<Integer, String> next = it.next();
@@ -28,7 +28,7 @@ public class GraphWalkerTest {
   }
 
   @Test
-  public void testdepthFirstTraversal() throws Exception {
+  public void testDepthFirstTraversal() throws Exception {
 
     Graph<Integer, String, Integer> g = TestGraphProvider
         .getWikipediaExampleGraph();
@@ -36,7 +36,7 @@ public class GraphWalkerTest {
         .getVertex(0).getVertexId());
     // this actually might have order involved, which is not guranteed by the
     // walker
-    int[] iterationIds = new int[] { 0, 2, 6, 7, 9, 8, 5, 3, 1, 4 };
+    int[] iterationIds = new int[] { 0, 4, 9, 8, 5, 7, 3, 2, 6, 1 };
     int index = 0;
     while (it.hasNext()) {
       VertexImpl<Integer, String> next = it.next();
@@ -53,8 +53,8 @@ public class GraphWalkerTest {
         .iterateEdges(g, g.getVertexIDSet());
     // this actually might have order involved, which is not guranteed by the
     // walker
-    int[] iterationIds = new int[] { 4, 1, 2, 5, 0, 7, 0, 6, 7, 9, 8, 1, 2, 3,
-        9, 2, 9, 5, 7, 8, 4, };
+    int[] iterationIds = new int[] { 1, 2, 4, 5, 0, 6, 7, 0, 7, 9, 1, 8, 2, 9,
+        2, 3, 5, 9, 7, 4, 8 };
     int index = 0;
     while (it.hasNext()) {
       Tuple<Integer, Edge<Integer, Integer>> next = it.next();
