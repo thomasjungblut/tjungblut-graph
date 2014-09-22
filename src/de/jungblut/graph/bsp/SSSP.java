@@ -4,7 +4,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -36,7 +35,7 @@ public final class SSSP {
       Vertex<IntWritable, IntWritable, IntIntPairWritable> {
 
     @Override
-    public void setup(Configuration conf) {
+    public void setup(HamaConfiguration conf) {
       this.setValue(new IntIntPairWritable(this.getVertexID().get(),
           Integer.MAX_VALUE));
     }

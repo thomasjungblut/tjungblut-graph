@@ -29,7 +29,7 @@ public class MindistSearchJob {
     int depth = 1;
     Configuration conf = new Configuration();
     conf.set("recursion.depth", depth + "");
-    Job job = new Job(conf);
+    Job job = Job.getInstance(conf);
     job.setJobName("Mindist Search");
 
     job.setMapperClass(TextGraphMapper.class);
@@ -59,7 +59,7 @@ public class MindistSearchJob {
     while (counter > 0) {
       conf = new Configuration();
       conf.set("recursion.depth", depth + "");
-      job = new Job(conf);
+      job = Job.getInstance(conf);
       job.setJobName("Mindist Search " + depth);
 
       job.setMapperClass(MindistSearchMapper.class);

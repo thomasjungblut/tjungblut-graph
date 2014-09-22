@@ -5,11 +5,14 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.EnumSet;
 import java.util.Set;
 
+import org.apache.hadoop.fs.CreateFlag;
+import org.apache.hadoop.fs.FileContext;
 import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RemoteIterator;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -40,11 +43,11 @@ public final class SSSPTest {
     GraphJob ssspJob = new GraphJob(conf, SSSP.class);
     // Set the job name
     ssspJob.setJobName("Single Source Shortest Path");
-    FileSystem fs = FileSystem.get(conf);
+    FileContext fs = FileContext.getFileContext(conf);
     Path in = new Path("/tmp/sssp/input.txt");
     createInput(fs, in);
     Path out = new Path("/tmp/sssp/out/");
-    if (fs.exists(out)) {
+    if (fs.util().exists(out)) {
       fs.delete(out, true);
     }
     conf.set(SSSP.START_VERTEX, "0");
@@ -77,14 +80,14 @@ public final class SSSPTest {
     }
   }
 
-  private void createInput(FileSystem fs, Path in) throws IOException {
-    if (fs.exists(in)) {
+  private void createInput(FileContext fs, Path in) throws IOException {
+    if (fs.util().exists(in)) {
       fs.delete(in, true);
     }
 
     @SuppressWarnings("resource")
     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-        fs.create(in)));
+        fs.create(in, EnumSet.of(CreateFlag.CREATE, CreateFlag.OVERWRITE))));
 
     Graph<Integer, String, Integer> wikipediaExampleGraph = TestGraphProvider
         .getWikipediaExampleGraph();
@@ -108,13 +111,14 @@ public final class SSSPTest {
     return sb.toString();
   }
 
-  private void verifyOutput(FileSystem fs, Path out) throws IOException {
+  private void verifyOutput(FileContext fs, Path out) throws IOException {
     int[] costResult = new int[10];
     int[] ancestorResult = new int[10];
     int[] costs = new int[] { 0, 85, 217, 503, 173, 165, 403, 320, 415, 487 };
     int[] ancestors = new int[] { 0, 0, 0, 7, 0, 1, 2, 2, 5, 7 };
-    FileStatus[] status = fs.listStatus(out);
-    for (FileStatus fss : status) {
+    RemoteIterator<FileStatus> listStatus = fs.listStatus(out);
+    while (listStatus.hasNext()) {
+      FileStatus fss = listStatus.next();
       @SuppressWarnings("resource")
       BufferedReader reader = new BufferedReader(new InputStreamReader(
           fs.open(fss.getPath())));

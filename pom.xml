@@ -11,7 +11,25 @@
 		<maven>3.0</maven>
 	</prerequisites>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<hadoop.version>2.2.0</hadoop.version>
+		<hama.version>0.6.4</hama.version>
+	</properties>
+
+
 	<dependencies>
+		<!-- hadoop -->
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-common</artifactId>
+			<version>${hadoop.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+			<version>${hadoop.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -28,21 +46,26 @@
 			<version>4.11</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-core</artifactId>
-			<!-- For windows users, I have overridden the jar in the cache with my 
-				own, so some don't run into failed permissions -->
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.hama</groupId>
 			<artifactId>hama-core</artifactId>
-			<version>0.6.3</version>
+			<version>${hama.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.hama</groupId>
 			<artifactId>hama-graph</artifactId>
-			<version>0.6.3</version>
+			<version>${hama.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>

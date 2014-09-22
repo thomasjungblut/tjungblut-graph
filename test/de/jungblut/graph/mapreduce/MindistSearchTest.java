@@ -3,10 +3,10 @@ package de.jungblut.graph.mapreduce;
 import java.util.HashMap;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.SequenceFile.Reader;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -19,8 +19,7 @@ public class MindistSearchTest {
     Path pref = new Path("files/min-search/depth_final/part-r-00000");
     Configuration conf = new Configuration();
     HashMap<Long, Long> result = new HashMap<>();
-    try (SequenceFile.Reader reader = new SequenceFile.Reader(
-        FileSystem.get(conf), pref, conf)) {
+    try (SequenceFile.Reader reader = new Reader(conf, Reader.file(pref))) {
       LongWritable key = new LongWritable();
       VertexWritable val = new VertexWritable();
       while (reader.next(key, val)) {
