@@ -38,9 +38,9 @@ public final class NthHopTest {
     conf.set(NthHop.MAX_HOPS_KEY, "3");
     GraphJob job = new GraphJob(conf, NthHop.class);
     FileSystem fs = FileSystem.get(conf);
-    Path in = new Path("/tmp/nthhop/input.txt");
+    Path in = new Path(TestHelpers.getTempDir() + "/nthhop/input.txt");
     createInput(fs, in);
-    Path out = new Path("/tmp/nthhop/out/");
+    Path out = new Path(TestHelpers.getTempDir() + "/nthhop/out/");
     if (fs.exists(out)) {
       fs.delete(out, true);
     }

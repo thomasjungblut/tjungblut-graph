@@ -38,9 +38,9 @@ public final class MindistSearchTest {
     conf.set("bsp.local.tasks.maximum", "1");
     GraphJob job = new GraphJob(conf, MindistSearch.class);
     FileSystem fs = FileSystem.get(conf);
-    Path in = new Path("/tmp/mdst/input.txt");
+    Path in = new Path(TestHelpers.getTempDir() + "/mdst/input.txt");
     createInput(fs, in);
-    Path out = new Path("/tmp/mdst/out/");
+    Path out = new Path(TestHelpers.getTempDir() + "/mdst/out/");
     if (fs.exists(out)) {
       fs.delete(out, true);
     }

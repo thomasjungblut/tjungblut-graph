@@ -13,6 +13,7 @@ import org.apache.hadoop.fs.FileContext;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.RemoteIterator;
+import org.apache.hadoop.fs.permission.FsPermission;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -44,9 +45,9 @@ public final class SSSPTest {
     // Set the job name
     ssspJob.setJobName("Single Source Shortest Path");
     FileContext fs = FileContext.getFileContext(conf);
-    Path in = new Path("/tmp/sssp/input.txt");
+    Path in = new Path(TestHelpers.getTempDir() + "/sssp/input.txt");
     createInput(fs, in);
-    Path out = new Path("/tmp/sssp/out/");
+    Path out = new Path(TestHelpers.getTempDir() + "/sssp/out/");
     if (fs.util().exists(out)) {
       fs.delete(out, true);
     }
@@ -81,23 +82,25 @@ public final class SSSPTest {
   }
 
   private void createInput(FileContext fs, Path in) throws IOException {
+
     if (fs.util().exists(in)) {
       fs.delete(in, true);
+    } else {
+      fs.mkdir(in.getParent(), FsPermission.getDefault(), true);
     }
 
-    @SuppressWarnings("resource")
-    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-        fs.create(in, EnumSet.of(CreateFlag.CREATE, CreateFlag.OVERWRITE))));
+    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+        fs.create(in, EnumSet.of(CreateFlag.CREATE, CreateFlag.OVERWRITE))))) {
 
-    Graph<Integer, String, Integer> wikipediaExampleGraph = TestGraphProvider
-        .getWikipediaExampleGraph();
-    for (Vertex<Integer, String> v : wikipediaExampleGraph.getVertexSet()) {
-      Set<Edge<Integer, Integer>> adjacentVertices = wikipediaExampleGraph
-          .getEdges(v.getVertexId());
-      writer.write(v.getVertexId() + "\t" + toString(adjacentVertices));
-      writer.write('\n');
+      Graph<Integer, String, Integer> wikipediaExampleGraph = TestGraphProvider
+          .getWikipediaExampleGraph();
+      for (Vertex<Integer, String> v : wikipediaExampleGraph.getVertexSet()) {
+        Set<Edge<Integer, Integer>> adjacentVertices = wikipediaExampleGraph
+            .getEdges(v.getVertexId());
+        writer.write(v.getVertexId() + "\t" + toString(adjacentVertices));
+        writer.write('\n');
+      }
     }
-    writer.close();
   }
 
   private String toString(Set<Edge<Integer, Integer>> adjacentVertices) {
@@ -119,18 +122,18 @@ public final class SSSPTest {
     RemoteIterator<FileStatus> listStatus = fs.listStatus(out);
     while (listStatus.hasNext()) {
       FileStatus fss = listStatus.next();
-      @SuppressWarnings("resource")
-      BufferedReader reader = new BufferedReader(new InputStreamReader(
-          fs.open(fss.getPath())));
+      try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+          fs.open(fss.getPath())))) {
 
-      String line;
-      while ((line = reader.readLine()) != null) {
-        System.out.println(line);
-        String[] split = line.split("\t");
-        costResult[Integer.parseInt(split[0])] = Integer.parseInt(split[2]);
-        ancestorResult[Integer.parseInt(split[0])] = Integer.parseInt(split[1]);
+        String line;
+        while ((line = reader.readLine()) != null) {
+          System.out.println(line);
+          String[] split = line.split("\t");
+          costResult[Integer.parseInt(split[0])] = Integer.parseInt(split[2]);
+          ancestorResult[Integer.parseInt(split[0])] = Integer
+              .parseInt(split[1]);
+        }
       }
-      reader.close();
     }
 
     for (int i = 0; i < ancestorResult.length; i++) {

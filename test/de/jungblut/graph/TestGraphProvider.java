@@ -10,7 +10,7 @@ public class TestGraphProvider {
   /**
    * from {@link http://de.wikipedia.org/wiki/Dijkstra-Algorithmus#Beispiel}
    */
-  @SuppressWarnings({ "unchecked", "unused" })
+  @SuppressWarnings({ "unchecked" })
   public static Graph<Integer, String, Integer> getWikipediaExampleGraph() {
     Graph<Integer, String, Integer> graph = new AdjacencyList<>();
 
