@@ -9,16 +9,16 @@ import org.junit.Test;
 
 import java.util.Set;
 
-public class PrimTest {
+public class KruskalTest {
 
     @Test
     public void testCalculateMST() {
 
         Graph<Integer, String, Integer> g = TestGraphProvider
                 .getWikipediaExampleGraph();
-        Prim<Integer, String, Integer> instance = Prim.getInstance();
-        Graph<Integer, String, Integer> mst = instance
-                .constructMinimumSpanningTree(g, g.getVertex(0).getVertexId());
+
+        Kruskal<Integer, String, Integer> kruskal = new Kruskal<>();
+        Graph<Integer, String, Integer> mst = kruskal.constructMinimumSpanningTree(g);
 
         Set<Vertex<Integer, String>> vertexSet = mst.getVertexSet();
         // all vertices must be contained
