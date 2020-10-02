@@ -47,8 +47,10 @@ public class TestGraphProvider {
         // stuttgart -> nuernberg
         graph.addVertex(cities.get(3), new Edge<>(cities.get(7).getVertexId(), 183));
 
-        // kassel -> muenchen
-        graph.addVertex(cities.get(4), new Edge<>(cities.get(9).getVertexId(), 502));
+        // kassel -> muenchen, frankfurt
+        graph.addVertex(cities.get(4),
+                new Edge<>(cities.get(9).getVertexId(), 502),
+                new Edge<>(cities.get(0).getVertexId(), 173));
 
         // karlsruhe -> mannheim, augsburg
         graph.addVertex(cities.get(5),
