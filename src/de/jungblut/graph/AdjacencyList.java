@@ -4,10 +4,11 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Sets;
 import de.jungblut.graph.model.Edge;
 import de.jungblut.graph.model.Vertex;
+import de.jungblut.graph.model.VertexImpl;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -65,14 +66,6 @@ public final class AdjacencyList<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE>
     }
 
     @Override
-    public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
-                          List<Edge<VERTEX_ID, EDGE_VALUE>> adjacents) {
-        for (Edge<VERTEX_ID, EDGE_VALUE> edge : adjacents) {
-            addVertex(vertex, edge);
-        }
-    }
-
-    @Override
     public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex) {
         vertexSet.add(vertex);
         vertexMap.put(vertex.getVertexId(), vertex);
@@ -94,12 +87,6 @@ public final class AdjacencyList<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE>
     @Override
     public Set<Edge<VERTEX_ID, EDGE_VALUE>> getEdges(VERTEX_ID vertexId) {
         return edgeMultiMap.get(vertexId);
-    }
-
-    @Override
-    public Set<Edge<VERTEX_ID, EDGE_VALUE>> getEdges(
-            Vertex<VERTEX_ID, VERTEX_VALUE> vertex) {
-        return getEdges(vertex.getVertexId());
     }
 
     @Override
@@ -125,6 +112,21 @@ public final class AdjacencyList<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE>
     @Override
     public int getNumEdges() {
         return adjacencyMultiMap.size();
+    }
+
+    @Override
+    public Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> transpose() {
+        Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> g = new AdjacencyList<>();
+
+        for (Vertex<VERTEX_ID, VERTEX_VALUE> v : getVertexSet()) {
+            g.addVertex(new VertexImpl<>(v.getVertexId(), v.getVertexValue()));
+        }
+
+        for (Map.Entry<VERTEX_ID, Edge<VERTEX_ID, EDGE_VALUE>> entry : edgeMultiMap.entries()) {
+            g.addEdge(entry.getValue().getDestinationVertexID(), new Edge<>(entry.getKey(), entry.getValue().getValue()));
+        }
+
+        return g;
     }
 
     @Override

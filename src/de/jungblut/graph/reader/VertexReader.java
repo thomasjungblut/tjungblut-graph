@@ -1,11 +1,11 @@
 package de.jungblut.graph.reader;
 
-import com.google.common.base.Optional;
 import de.jungblut.graph.AdjacencyList;
 import de.jungblut.graph.Graph;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Reader interface for vertices.
@@ -26,7 +26,7 @@ public interface VertexReader<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
      * @throws IOException in case of a {@link FileNotFoundException} or some
      *                     other IO Error.
      */
-    public Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> readGraph(
+    Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> readGraph(
             Optional<Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE>> optionalGraph)
             throws IOException;
 

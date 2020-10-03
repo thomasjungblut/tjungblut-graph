@@ -197,7 +197,7 @@ public class StoerWagnerMinCut<VERTEX_ID, VERTEX_VALUE> {
     }
 
     private CutOfThePhase<VERTEX_ID> maximumAdjacencySearch(Graph<VERTEX_ID, VERTEX_VALUE, Integer> g) {
-        return maximumAdjacencySearch(g, g.getVertexIDSet().iterator().next());
+        return maximumAdjacencySearch(g, null);
     }
 
     /**
