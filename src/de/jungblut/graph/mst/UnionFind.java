@@ -9,7 +9,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class UnionFind<VERTEX_ID> {
 
-    class Node {
+    public class Node {
         Node parent;
         VERTEX_ID id;
         int numNodes;
@@ -24,7 +24,7 @@ public class UnionFind<VERTEX_ID> {
         }
     }
 
-    Node addDisjointedVertex(VERTEX_ID v) {
+    public Node addDisjointedVertex(VERTEX_ID v) {
         checkNotNull(v);
         Node node = new Node();
         node.id = v;
@@ -32,7 +32,7 @@ public class UnionFind<VERTEX_ID> {
         return node;
     }
 
-    Node find(Node n) {
+    public Node find(Node n) {
         Node root = n;
         while (root.parent != null) {
             root = root.parent;
@@ -41,7 +41,7 @@ public class UnionFind<VERTEX_ID> {
         return root;
     }
 
-    void union(Node u, Node v) {
+    public void union(Node u, Node v) {
         Node uRoot = find(u);
         Node vRoot = find(v);
 
