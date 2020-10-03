@@ -1,6 +1,5 @@
 package de.jungblut.graph.reader;
 
-import com.google.common.base.Optional;
 import de.jungblut.graph.AdjacencyList;
 import de.jungblut.graph.Graph;
 import de.jungblut.graph.model.Edge;
@@ -9,6 +8,7 @@ import de.jungblut.graph.model.VertexImpl;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
@@ -60,11 +60,7 @@ public final class CostVertexLineReader implements
             throws IOException {
         // check if graph is not absent
         Graph<Integer, Integer, Integer> graph;
-        if (optionalGraph.isPresent()) {
-            graph = optionalGraph.get();
-        } else {
-            graph = new AdjacencyList<>();
-        }
+        graph = optionalGraph.orElseGet(AdjacencyList::new);
 
         // read line by line
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
@@ -94,7 +90,7 @@ public final class CostVertexLineReader implements
         VertexImpl<Integer, Integer> vertex = new VertexImpl<>(id, null);
         graph.addVertex(vertex, new Edge<>(dest, cost));
         // take care that the destination is there
-        graph.addVertex(new VertexImpl<Integer, Integer>(dest, null));
+        graph.addVertex(new VertexImpl<>(dest, null));
         if (undirected) {
             graph.addEdge(dest, new Edge<>(vertex.getVertexId(), cost));
         }

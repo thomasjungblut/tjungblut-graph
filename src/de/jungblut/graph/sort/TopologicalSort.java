@@ -19,10 +19,6 @@ import java.util.Set;
  */
 public final class TopologicalSort {
 
-    private TopologicalSort() {
-        throw new IllegalAccessError();
-    }
-
     /**
      * Sorts the graph's vertices topological with Thomas Cormen's algorithm
      * (2001).
@@ -31,7 +27,7 @@ public final class TopologicalSort {
      * @return null if the graph contained cycles, or a list of vertices in
      * ascending order.
      */
-    public static <VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> List<Vertex<VERTEX_ID, VERTEX_VALUE>> sort(
+    public <VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> List<Vertex<VERTEX_ID, VERTEX_VALUE>> sort(
             Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> g) {
 
         List<Vertex<VERTEX_ID, VERTEX_VALUE>> solution = Lists.newArrayList();
@@ -58,7 +54,7 @@ public final class TopologicalSort {
      * @param tmpMarked the temporary marked vertices for every recursion step.
      * @return true if found a cycle, false if not.
      */
-    private static <VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> boolean visit(
+    private <VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> boolean visit(
             VERTEX_ID current, Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> g,
             List<Vertex<VERTEX_ID, VERTEX_VALUE>> solution, Set<VERTEX_ID> unmarked,
             Set<VERTEX_ID> tmpMarked) {

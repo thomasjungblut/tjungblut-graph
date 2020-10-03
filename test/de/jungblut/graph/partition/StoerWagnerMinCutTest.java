@@ -94,8 +94,21 @@ public class StoerWagnerMinCutTest {
         Assert.assertEquals(1, gPrime.getEdge(6, 3).getValue().intValue());
     }
 
-    // TODO test the negative edges and numVertices conditions
+    @Test(expected = IllegalArgumentException.class)
+    public void failOnNegativeEdges() {
+        Graph<Object, Object, Integer> g = new AdjacencyList<>();
+        g.addVertex(new VertexImpl<>(1, "a"));
+        g.addVertex(new VertexImpl<>(2, "b"));
+        g.addEdge(1, new Edge<>(2, -5));
+        new StoerWagnerMinCut<>().computeMinCut(g);
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void failOnNotEnoughVertices() {
+        Graph<Object, Object, Integer> g = new AdjacencyList<>();
+        g.addVertex(new VertexImpl<>(1, "a"));
+        new StoerWagnerMinCut<>().computeMinCut(g);
+    }
 
     // https://fktpm.ru/file/204-stoer-wagner-a-simple-min-cut-algorithm.pdf page 5
     @SuppressWarnings("unchecked")

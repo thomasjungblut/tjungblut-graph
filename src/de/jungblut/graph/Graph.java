@@ -3,7 +3,6 @@ package de.jungblut.graph;
 import de.jungblut.graph.model.Edge;
 import de.jungblut.graph.model.Vertex;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,12 +15,6 @@ import java.util.Set;
  * @author thomas.jungblut
  */
 public interface Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
-
-    /**
-     * Adds a vertex with a list of adjacents to it.
-     */
-    void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
-                   List<Edge<VERTEX_ID, EDGE_VALUE>> adjacents);
 
     /**
      * Adds a vertex with a single adjacent to it.
@@ -43,8 +36,7 @@ public interface Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
     /**
      * Gets a set of adjacent vertices from a given vertex id.
      */
-    Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getAdjacentVertices(
-            VERTEX_ID vertexId);
+    Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getAdjacentVertices(VERTEX_ID vertexId);
 
     /**
      * Get the vertex by its id.
@@ -54,8 +46,7 @@ public interface Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
     /**
      * Gets a set of adjacent vertices from a given vertex.
      */
-    Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getAdjacentVertices(
-            Vertex<VERTEX_ID, VERTEX_VALUE> vertex);
+    Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getAdjacentVertices(Vertex<VERTEX_ID, VERTEX_VALUE> vertex);
 
     /**
      * Gets all vertices associated with this graph.
@@ -80,14 +71,6 @@ public interface Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
      */
     Set<Edge<VERTEX_ID, EDGE_VALUE>> getEdges(VERTEX_ID vertexId);
 
-    /**
-     * Get's a set of edges outbound from the given vertex.
-     *
-     * @param vertex the vertex to get out edges.
-     * @return a set of edges.
-     */
-    Set<Edge<VERTEX_ID, EDGE_VALUE>> getEdges(
-            Vertex<VERTEX_ID, VERTEX_VALUE> vertex);
 
     /**
      * Finds an edge between the source and destination vertex.
@@ -105,5 +88,11 @@ public interface Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
      * @return how many edges are present in this graph.
      */
     int getNumEdges();
+
+    /**
+     * @return the transpose of this graph, meaning that it will reverse all edges.
+     * So if there was an edge from A->B, the returned graph will contain one for B->A instead.
+     */
+    Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> transpose();
 
 }

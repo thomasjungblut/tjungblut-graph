@@ -32,7 +32,11 @@ public class IdCostTuple<VERTEX_ID, DISTANCE extends Comparable<DISTANCE>> imple
 
     @Override
     public String toString() {
-        return distance + "";
+        return "IdCostTuple{" +
+                "vertexId=" + vertexId +
+                ", distance=" + distance +
+                ", source=" + source +
+                '}';
     }
 
     public DISTANCE getDistance() {

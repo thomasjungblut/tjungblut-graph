@@ -1,12 +1,12 @@
 package de.jungblut.graph.reader;
 
-import com.google.common.base.Optional;
 import de.jungblut.graph.Graph;
 import de.jungblut.graph.model.Vertex;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class CostVertexLineReaderTest {
 
@@ -14,8 +14,7 @@ public class CostVertexLineReaderTest {
     public void testReader() throws IOException {
         CostVertexLineReader reader = new CostVertexLineReader(
                 "res/weighted_graph/edges.txt", ' ', 1, true);
-        Optional<Graph<Integer, Integer, Integer>> absent = Optional.absent();
-        Graph<Integer, Integer, Integer> graph = reader.readGraph(absent);
+        Graph<Integer, Integer, Integer> graph = reader.readGraph(Optional.empty());
 
         Vertex<Integer, Integer> vertex = graph.getVertex(1);
         Assert.assertNotNull(vertex);
