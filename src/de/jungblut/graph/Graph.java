@@ -20,57 +20,57 @@ public interface Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
     /**
      * Adds a vertex with a list of adjacents to it.
      */
-    public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
-                          List<Edge<VERTEX_ID, EDGE_VALUE>> adjacents);
+    void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
+                   List<Edge<VERTEX_ID, EDGE_VALUE>> adjacents);
 
     /**
      * Adds a vertex with a single adjacent to it.
      */
-    public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
-                          Edge<VERTEX_ID, EDGE_VALUE> adjacent);
+    void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
+                   Edge<VERTEX_ID, EDGE_VALUE> adjacent);
 
     /**
      * Adds a vertex with a no adjacents to it.
      */
-    public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex);
+    void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex);
 
     /**
      * Adds a vertex with a list of adjacents to it.
      */
-    public void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
-                          @SuppressWarnings("unchecked") Edge<VERTEX_ID, EDGE_VALUE>... adjacents);
+    void addVertex(Vertex<VERTEX_ID, VERTEX_VALUE> vertex,
+                   @SuppressWarnings("unchecked") Edge<VERTEX_ID, EDGE_VALUE>... adjacents);
 
     /**
      * Gets a set of adjacent vertices from a given vertex id.
      */
-    public Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getAdjacentVertices(
+    Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getAdjacentVertices(
             VERTEX_ID vertexId);
 
     /**
      * Get the vertex by its id.
      */
-    public Vertex<VERTEX_ID, VERTEX_VALUE> getVertex(VERTEX_ID vertexId);
+    Vertex<VERTEX_ID, VERTEX_VALUE> getVertex(VERTEX_ID vertexId);
 
     /**
      * Gets a set of adjacent vertices from a given vertex.
      */
-    public Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getAdjacentVertices(
+    Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getAdjacentVertices(
             Vertex<VERTEX_ID, VERTEX_VALUE> vertex);
 
     /**
      * Gets all vertices associated with this graph.
      */
-    public Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getVertexSet();
+    Set<Vertex<VERTEX_ID, VERTEX_VALUE>> getVertexSet();
 
     /**
      * Gets all verte IDs associated with this graph.
      */
-    public Set<VERTEX_ID> getVertexIDSet();
+    Set<VERTEX_ID> getVertexIDSet();
 
     /**
      * Adds an edge to a vertex.
      */
-    public void addEdge(VERTEX_ID vertexId, Edge<VERTEX_ID, EDGE_VALUE> edge);
+    void addEdge(VERTEX_ID vertexId, Edge<VERTEX_ID, EDGE_VALUE> edge);
 
     /**
      * Get's a set of edges outbound from the given vertex id.
@@ -78,7 +78,7 @@ public interface Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
      * @param vertexId the id of the vertex to get out edges.
      * @return a set of edges.
      */
-    public Set<Edge<VERTEX_ID, EDGE_VALUE>> getEdges(VERTEX_ID vertexId);
+    Set<Edge<VERTEX_ID, EDGE_VALUE>> getEdges(VERTEX_ID vertexId);
 
     /**
      * Get's a set of edges outbound from the given vertex.
@@ -86,7 +86,7 @@ public interface Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
      * @param vertex the vertex to get out edges.
      * @return a set of edges.
      */
-    public Set<Edge<VERTEX_ID, EDGE_VALUE>> getEdges(
+    Set<Edge<VERTEX_ID, EDGE_VALUE>> getEdges(
             Vertex<VERTEX_ID, VERTEX_VALUE> vertex);
 
     /**
@@ -94,16 +94,16 @@ public interface Graph<VERTEX_ID, VERTEX_VALUE, EDGE_VALUE> {
      *
      * @return null if nothing found, else the edge between those twos.
      */
-    public Edge<VERTEX_ID, EDGE_VALUE> getEdge(VERTEX_ID source, VERTEX_ID dest);
+    Edge<VERTEX_ID, EDGE_VALUE> getEdge(VERTEX_ID source, VERTEX_ID dest);
 
     /**
      * @return how many vertices are present in this graph.
      */
-    public int getNumVertices();
+    int getNumVertices();
 
     /**
      * @return how many edges are present in this graph.
      */
-    public int getNumEdges();
+    int getNumEdges();
 
 }
