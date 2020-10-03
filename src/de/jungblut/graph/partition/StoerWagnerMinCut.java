@@ -180,7 +180,7 @@ public class StoerWagnerMinCut<VERTEX_ID, VERTEX_VALUE> {
             }
         }
 
-        // for all edges from "t" that we haven't to "s" transferred yet
+        // for all edges from "t" that we haven't transferred to "s" yet, but do not go towards "s"
         for (Edge<VERTEX_ID, Integer> e : g.getEdges(cutOfThePhase.t)) {
             if (e.getDestinationVertexID().equals(cutOfThePhase.s)) {
                 continue;
@@ -218,7 +218,7 @@ public class StoerWagnerMinCut<VERTEX_ID, VERTEX_VALUE> {
             VERTEX_ID maxNextVertex = null;
             int maxWeight = Integer.MIN_VALUE;
             for (VERTEX_ID next : candidates) {
-                // compute the inlink weight sum from all vertices in set to that vertex
+                // compute the inlink weight sum from all vertices in "maxAdjacencyOrderedList" towards vertex "next"
                 int weightSum = 0;
                 for (VERTEX_ID s : maxAdjacencyOrderedList) {
                     Edge<VERTEX_ID, Integer> edge = g.getEdge(next, s);
@@ -241,7 +241,7 @@ public class StoerWagnerMinCut<VERTEX_ID, VERTEX_VALUE> {
         // we take the last two vertices in that list and their weight as a cut of the phase
         int n = maxAdjacencyOrderedList.size();
         return new CutOfThePhase<>(
-                maxAdjacencyOrderedList.get(n - 2), // that's "s" in the literature and will remain as merged with "t"
+                maxAdjacencyOrderedList.get(n - 2), // that's "s" in the literature and will remain as a merged vertex with "t"
                 maxAdjacencyOrderedList.get(n - 1), // that's "t" and will be removed afterwards
                 cutWeight.get(cutWeight.size() - 1)); // that's "w" to compute the minimum cut on later
     }
