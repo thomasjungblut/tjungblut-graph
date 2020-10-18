@@ -117,6 +117,7 @@ public class StoerWagnerMinCut<VERTEX_ID, VERTEX_VALUE> {
         Graph<VERTEX_ID, VERTEX_VALUE, Integer> first = new AdjacencyList<>();
         Graph<VERTEX_ID, VERTEX_VALUE, Integer> second = new AdjacencyList<>();
         List<Tuple<Vertex<VERTEX_ID, VERTEX_VALUE>, Edge<VERTEX_ID, Integer>>> cuttingEdges = new ArrayList<>();
+        int cutWeight = 0;
 
         for (VERTEX_ID v : originalGraph.getVertexIDSet()) {
             if (partition.contains(v)) {
@@ -135,11 +136,12 @@ public class StoerWagnerMinCut<VERTEX_ID, VERTEX_VALUE> {
                     second.addEdge(v, new Edge<>(e.getDestinationVertexID(), e.getValue()));
                 } else {
                     cuttingEdges.add(new Tuple<>(originalGraph.getVertex(v), new Edge<>(e.getDestinationVertexID(), e.getValue())));
+                    cutWeight += e.getValue();
                 }
             }
         }
 
-        return new MinCut(first, second, cuttingEdges, currentBestCut.weight);
+        return new MinCut(first, second, cuttingEdges, cutWeight);
     }
 
     // bascially we're copying the whole graph into a new one, we leave the vertex "t" out of it (including the edge between "s" and "t")
