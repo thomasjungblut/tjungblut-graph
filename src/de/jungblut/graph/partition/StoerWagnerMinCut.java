@@ -4,6 +4,7 @@ import de.jungblut.graph.AdjacencyList;
 import de.jungblut.graph.Graph;
 import de.jungblut.graph.Tuple;
 import de.jungblut.graph.model.Edge;
+import de.jungblut.graph.model.OrderedTuple;
 import de.jungblut.graph.model.Vertex;
 import de.jungblut.graph.model.VertexImpl;
 
@@ -15,7 +16,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  * This class implements the Stoer-Wagner MinCut algorithm using non-negative integer weights.
  * This follows the paper from https://fktpm.ru/file/204-stoer-wagner-a-simple-min-cut-algorithm.pdf.
  */
-public class StoerWagnerMinCut<VERTEX_ID, VERTEX_VALUE> {
+public class StoerWagnerMinCut<VERTEX_ID extends Comparable<VERTEX_ID>, VERTEX_VALUE> {
 
     public class MinCut {
         private final Graph<VERTEX_ID, VERTEX_VALUE, Integer> first;
@@ -105,15 +106,14 @@ public class StoerWagnerMinCut<VERTEX_ID, VERTEX_VALUE> {
             g = mergeVerticesFromCut(g, cutOfThePhase);
         }
 
-        return constructMinCutResult(originalGraph, currentBestPartition, currentBestCut);
+        return constructMinCutResult(originalGraph, currentBestPartition);
     }
 
     // we do a two-pass algorithm to reconstruct the sub-graphs:
     // - first we distribute the vertices into their respective graph
     // - second we align edges: if they cross graphs they will end in the list, otherwise in the respective graph
     private MinCut constructMinCutResult(Graph<VERTEX_ID, VERTEX_VALUE, Integer> originalGraph,
-                                         Set<VERTEX_ID> partition,
-                                         CutOfThePhase<VERTEX_ID> currentBestCut) {
+                                         Set<VERTEX_ID> partition) {
         Graph<VERTEX_ID, VERTEX_VALUE, Integer> first = new AdjacencyList<>();
         Graph<VERTEX_ID, VERTEX_VALUE, Integer> second = new AdjacencyList<>();
         List<Tuple<Vertex<VERTEX_ID, VERTEX_VALUE>, Edge<VERTEX_ID, Integer>>> cuttingEdges = new ArrayList<>();
@@ -127,6 +127,8 @@ public class StoerWagnerMinCut<VERTEX_ID, VERTEX_VALUE> {
             }
         }
 
+        // we need to dedupe the edges for directed graphs, so we don't double-count the weights
+        HashSet<OrderedTuple<VERTEX_ID>> edgeSet = new HashSet<>();
         for (VERTEX_ID v : originalGraph.getVertexIDSet()) {
             Set<Edge<VERTEX_ID, Integer>> edges = originalGraph.getEdges(v);
             for (Edge<VERTEX_ID, Integer> e : edges) {
@@ -136,7 +138,9 @@ public class StoerWagnerMinCut<VERTEX_ID, VERTEX_VALUE> {
                     second.addEdge(v, new Edge<>(e.getDestinationVertexID(), e.getValue()));
                 } else {
                     cuttingEdges.add(new Tuple<>(originalGraph.getVertex(v), new Edge<>(e.getDestinationVertexID(), e.getValue())));
-                    cutWeight += e.getValue();
+                    if (edgeSet.add(new OrderedTuple<>(v, e.getDestinationVertexID()))) {
+                        cutWeight += e.getValue();
+                    }
                 }
             }
         }
