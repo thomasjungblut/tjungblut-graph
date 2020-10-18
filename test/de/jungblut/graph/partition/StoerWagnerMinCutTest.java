@@ -96,18 +96,18 @@ public class StoerWagnerMinCutTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void failOnNegativeEdges() {
-        Graph<Object, Object, Integer> g = new AdjacencyList<>();
-        g.addVertex(new VertexImpl<>(1, "a"));
-        g.addVertex(new VertexImpl<>(2, "b"));
-        g.addEdge(1, new Edge<>(2, -5));
-        new StoerWagnerMinCut<>().computeMinCut(g);
+        Graph<String, Integer, Integer> g = new AdjacencyList<>();
+        g.addVertex(new VertexImpl<>("a", 1));
+        g.addVertex(new VertexImpl<>("b", 2));
+        g.addEdge("a", new Edge<>("b", -5));
+        new StoerWagnerMinCut<String, Integer>().computeMinCut(g);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void failOnNotEnoughVertices() {
-        Graph<Object, Object, Integer> g = new AdjacencyList<>();
-        g.addVertex(new VertexImpl<>(1, "a"));
-        new StoerWagnerMinCut<>().computeMinCut(g);
+        Graph<String, Integer, Integer> g = new AdjacencyList<>();
+        g.addVertex(new VertexImpl<>("a", 5));
+        new StoerWagnerMinCut<String, Integer>().computeMinCut(g);
     }
 
     // https://fktpm.ru/file/204-stoer-wagner-a-simple-min-cut-algorithm.pdf page 5
