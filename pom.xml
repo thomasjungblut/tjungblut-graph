@@ -13,7 +13,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hadoop.version>2.2.0</hadoop.version>
+        <hadoop.version>2.10.1</hadoop.version>
         <hama.version>0.6.4</hama.version>
     </properties>
 
